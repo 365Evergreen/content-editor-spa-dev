@@ -1,47 +1,51 @@
-import React from "react";
+import React, { useState } from "react";
+import { File } from "lucide-react";
+import MediaPicker from "./MediaPicker";
 
 export interface FileBlockProps {
-  block: {
-    id: string;
-    type: "file";
-    name: string;
-    url: string;
-  };
+  block: { id: string; type: "file"; url?: string };
   onUpdate: (id: string, updated: Partial<FileBlockProps["block"]>) => void;
-  onFocus?: () => void;
+  mediaLibrary: string[];
 }
 
-const FileBlock: React.FC<FileBlockProps> = ({ block, onUpdate, onFocus }) => {
-  const updateName = (value: string) => onUpdate(block.id, { name: value });
-  const updateUrl = (value: string) => onUpdate(block.id, { url: value });
+const FileBlock: React.FC<FileBlockProps> = ({
+  block,
+  onUpdate,
+  mediaLibrary
+}) => {
+  const [showPicker, setShowPicker] = useState(false);
 
   return (
-    <div className="py-3" onClick={onFocus}>
-      <input
-        type="text"
-        className="w-full border rounded px-2 py-1 mb-2"
-        placeholder="File name"
-        value={block.name}
-        onChange={(e) => updateName(e.target.value)}
-      />
-
-      <input
-        type="text"
-        className="w-full border rounded px-2 py-1"
-        placeholder="File URL"
-        value={block.url}
-        onChange={(e) => updateUrl(e.target.value)}
-      />
-
-      {block.url && (
-        <a
-          href={block.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-3 inline-block text-blue-600 underline"
+    <div className="relative border rounded-lg p-4 bg-white">
+      <div className="flex justify-between mb-3">
+        <h3 className="font-semibold">File</h3>
+        <button
+          className="p-1 hover:bg-gray-100 rounded"
+          onClick={() => setShowPicker(true)}
         >
-          Download {block.name || "file"}
+          <File className="w-4 h-4" />
+        </button>
+      </div>
+
+      {showPicker && (
+        <MediaPicker
+          mediaLibrary={mediaLibrary}
+          onSelect={(url) => {
+            onUpdate(block.id, { url });
+            setShowPicker(false);
+          }}
+          onClose={() => setShowPicker(false)}
+        />
+      )}
+
+      {block.url ? (
+        <a href={block.url} className="text-blue-600 underline">
+          Download File
         </a>
+      ) : (
+        <div className="text-center text-gray-500 py-10 border border-dashed rounded">
+          Upload or insert a file
+        </div>
       )}
     </div>
   );

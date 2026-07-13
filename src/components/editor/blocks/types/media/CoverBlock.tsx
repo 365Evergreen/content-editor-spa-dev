@@ -1,44 +1,54 @@
-import React from "react";
+import React, { useState } from "react";
+import { FileImage } from "lucide-react";
+import MediaPicker from "./MediaPicker";
 
 export interface CoverBlockProps {
-  block: {
-    id: string;
-    type: "cover";
-    image: string;
-    text: string;
-  };
+  block: { id: string; type: "cover"; url?: string; text?: string };
   onUpdate: (id: string, updated: Partial<CoverBlockProps["block"]>) => void;
-  onFocus?: () => void;
+  mediaLibrary: string[];
 }
 
-const CoverBlock: React.FC<CoverBlockProps> = ({ block, onUpdate, onFocus }) => {
-  const updateImage = (value: string) => onUpdate(block.id, { image: value });
-  const updateText = (value: string) => onUpdate(block.id, { text: value });
+const CoverBlock: React.FC<CoverBlockProps> = ({
+  block,
+  onUpdate,
+  mediaLibrary
+}) => {
+  const [showPicker, setShowPicker] = useState(false);
 
   return (
-    <div className="py-3" onClick={onFocus}>
-      <input
-        type="text"
-        className="w-full border rounded px-2 py-1 mb-2"
-        placeholder="Cover image URL"
-        value={block.image}
-        onChange={(e) => updateImage(e.target.value)}
-      />
+    <div className="relative border rounded-lg bg-gray-200 overflow-hidden">
+      <button
+        className="absolute top-2 right-2 bg-white p-1 rounded shadow"
+        onClick={() => setShowPicker(true)}
+      >
+        <FileImage className="w-4 h-4" />
+      </button>
 
-      <input
-        type="text"
-        className="w-full border rounded px-2 py-1"
-        placeholder="Overlay text"
-        value={block.text}
-        onChange={(e) => updateText(e.target.value)}
-      />
+      {showPicker && (
+        <MediaPicker
+          mediaLibrary={mediaLibrary}
+          onSelect={(url) => {
+            onUpdate(block.id, { url });
+            setShowPicker(false);
+          }}
+          onClose={() => setShowPicker(false)}
+        />
+      )}
 
-      {block.image && (
-        <div
-          className="mt-3 h-48 bg-cover bg-center flex items-center justify-center text-white text-xl font-semibold"
-          style={{ backgroundImage: `url(${block.image})` }}
-        >
-          {block.text}
+      {block.url ? (
+        <div className="relative">
+          <img src={block.url} className="w-full h-64 object-cover" />
+          <textarea
+            className="absolute inset-0 w-full h-full bg-black/40 text-white 
+                       text-3xl font-bold p-6 outline-none resize-none"
+            placeholder="Cover text..."
+            value={block.text || ""}
+            onChange={(e) => onUpdate(block.id, { text: e.target.value })}
+          />
+        </div>
+      ) : (
+        <div className="text-center text-gray-500 py-20 border border-dashed rounded">
+          Add a cover image
         </div>
       )}
     </div>

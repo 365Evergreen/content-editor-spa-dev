@@ -4,6 +4,7 @@ export interface TableBlockProps {
   block: {
     id: string;
     type: "table";
+    domain: "text";
     rows: string[][];
   };
   onUpdate: (id: string, updated: Partial<TableBlockProps["block"]>) => void;

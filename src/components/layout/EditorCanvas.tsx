@@ -6,7 +6,7 @@ export interface EditorCanvasProps {
 
 const EditorCanvas: React.FC<EditorCanvasProps> = ({ children }) => {
   return (
-<main className="bg-white border rounded-lg min-h-[70vh] overflow-auto">
+<main className="bg-gray-100 col-span-12 min-h-[100vh] overflow-auto">
   {children}
 </main>
 

@@ -1,27 +1,26 @@
 import React from "react";
 
-// Media block types
 import ImageBlock from "../types/media/ImageBlock";
 import GalleryBlock from "../types/media/GalleryBlock";
-import AudioBlock from "../types/media/AudioBlock";
-import CoverBlock from "../types/media/CoverBlock";
-import FileBlock from "../types/media/FileBlock";
 import VideoBlock from "../types/media/VideoBlock";
+import AudioBlock from "../types/media/AudioBlock";
+import FileBlock from "../types/media/FileBlock";
+import CoverBlock from "../types/media/CoverBlock";
 
 export interface MediaRendererProps {
   block: any;
   onUpdate: (id: string, updated: Partial<any>) => void;
-  onFocus?: () => void;
+  mediaLibrary: string[];
 }
 
-const MediaRenderer: React.FC<MediaRendererProps> = ({ block, onUpdate, onFocus }) => {
+const MediaRenderer: React.FC<MediaRendererProps> = ({ block, onUpdate, mediaLibrary }) => {
   switch (block.type) {
     case "image":
       return (
         <ImageBlock
           block={block}
           onUpdate={onUpdate}
-          onFocus={onFocus}
+          mediaLibrary={mediaLibrary}
         />
       );
 
@@ -30,34 +29,7 @@ const MediaRenderer: React.FC<MediaRendererProps> = ({ block, onUpdate, onFocus 
         <GalleryBlock
           block={block}
           onUpdate={onUpdate}
-          onFocus={onFocus}
-        />
-      );
-
-    case "audio":
-      return (
-        <AudioBlock
-          block={block}
-          onUpdate={onUpdate}
-          onFocus={onFocus}
-        />
-      );
-
-    case "cover":
-      return (
-        <CoverBlock
-          block={block}
-          onUpdate={onUpdate}
-          onFocus={onFocus}
-        />
-      );
-
-    case "file":
-      return (
-        <FileBlock
-          block={block}
-          onUpdate={onUpdate}
-          onFocus={onFocus}
+          mediaLibrary={mediaLibrary}
         />
       );
 
@@ -66,7 +38,34 @@ const MediaRenderer: React.FC<MediaRendererProps> = ({ block, onUpdate, onFocus 
         <VideoBlock
           block={block}
           onUpdate={onUpdate}
-          onFocus={onFocus}
+          mediaLibrary={mediaLibrary}
+        />
+      );
+
+    case "audio":
+      return (
+        <AudioBlock
+          block={block}
+          onUpdate={onUpdate}
+          mediaLibrary={mediaLibrary}
+        />
+      );
+
+    case "file":
+      return (
+        <FileBlock
+          block={block}
+          onUpdate={onUpdate}
+          mediaLibrary={mediaLibrary}
+        />
+      );
+
+    case "cover":
+      return (
+        <CoverBlock
+          block={block}
+          onUpdate={onUpdate}
+          mediaLibrary={mediaLibrary}
         />
       );
 

@@ -1,57 +1,62 @@
-import React from "react";
+import React, { useState } from "react";
+import { X, Plus } from "lucide-react";
+import MediaPicker from "./MediaPicker";
 
 export interface GalleryBlockProps {
-  block: {
-    id: string;
-    type: "gallery";
-    images: string[];
-  };
+  block: { id: string; type: "gallery"; urls: string[] };
   onUpdate: (id: string, updated: Partial<GalleryBlockProps["block"]>) => void;
-  onFocus?: () => void;
+  mediaLibrary: string[];
 }
 
-const GalleryBlock: React.FC<GalleryBlockProps> = ({ block, onUpdate, onFocus }) => {
-  const updateImage = (index: number, value: string) => {
-    const updated = [...block.images];
-    updated[index] = value;
-    onUpdate(block.id, { images: updated });
-  };
+const GalleryBlock: React.FC<GalleryBlockProps> = ({
+  block,
+  onUpdate,
+  mediaLibrary
+}) => {
+  const [showPicker, setShowPicker] = useState(false);
 
-  const addImage = () => {
-    onUpdate(block.id, { images: [...block.images, ""] });
-  };
-
-  const removeImage = (index: number) => {
-    const updated = block.images.filter((_, i) => i !== index);
-    onUpdate(block.id, { images: updated });
+  const addImage = (url: string) => {
+    onUpdate(block.id, { urls: [...block.urls, url] });
+    setShowPicker(false);
   };
 
   return (
-    <div className="py-3" onClick={onFocus}>
-      {block.images.map((src, index) => (
-        <div key={index} className="flex gap-2 mb-2">
-          <input
-            type="text"
-            className="flex-1 border rounded px-2 py-1"
-            placeholder="Image URL"
-            value={src}
-            onChange={(e) => updateImage(index, e.target.value)}
-          />
-          <button
-            className="px-2 py-1 bg-red-200 text-red-700 rounded hover:bg-red-300"
-            onClick={() => removeImage(index)}
-          >
-            ✕
-          </button>
-        </div>
-      ))}
+    <div className="relative border rounded-lg p-4 bg-white">
+      <div className="flex justify-between mb-3">
+        <h3 className="font-semibold">Gallery</h3>
+        <button
+          className="p-1 hover:bg-gray-100 rounded"
+          onClick={() => setShowPicker(true)}
+        >
+          <Plus className="w-4 h-4" />
+        </button>
+      </div>
 
-      <button
-        className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
-        onClick={addImage}
-      >
-        + Add Image
-      </button>
+      {showPicker && (
+        <MediaPicker
+          mediaLibrary={mediaLibrary}
+          onSelect={addImage}
+          onClose={() => setShowPicker(false)}
+        />
+      )}
+
+      <div className="grid grid-cols-3 gap-3">
+        {block.urls.map((url, i) => (
+          <div key={i} className="relative">
+            <img src={url} className="w-full h-24 object-cover rounded" />
+            <button
+              className="absolute top-1 right-1 bg-white rounded p-1"
+              onClick={() =>
+                onUpdate(block.id, {
+                  urls: block.urls.filter((_, idx) => idx !== i)
+                })
+              }
+            >
+              <X className="w-3 h-3" />
+            </button>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

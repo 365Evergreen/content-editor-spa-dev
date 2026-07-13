@@ -22,7 +22,7 @@ const EditorLayout: React.FC<EditorLayoutProps> = ({
   const [rightOpen, setRightOpen] = React.useState(true);
 
   return (
-    <div className="w-full min-h-screen p-0 bg-red-100 flex flex-col">
+    <div className="w-full min-h-screen p-0 bg-gray-100 flex flex-col">
 
       {/* HEADER */}
       <EditorHeader
@@ -44,12 +44,12 @@ const EditorLayout: React.FC<EditorLayoutProps> = ({
         <div
           className={
             leftOpen && rightOpen
-              ? "col-span-6"
+              ? "col-span-8"
               : leftOpen && !rightOpen
-              ? "col-span-9"
+              ? "col-span-10"
               : !leftOpen && rightOpen
-              ? "col-span-9"
-              : "col-span-12"
+              ? "col-span-10"
+              : "col-span-12 h-full"
           }
         >
           <EditorCanvas>{children}</EditorCanvas>

@@ -51,7 +51,7 @@ const BlockPalette: React.FC<BlockPaletteProps> = ({ onAddBlock }) => {
       title: "Design",
       items: [
         { type: "accordion", label: "Accordion", icon: PanelBottom },
-        { type: "buttons", label: "Buttons", icon: SquarePlus },
+        { type: "button", label: "Button", icon: SquarePlus },
         { type: "columns", label: "Columns", icon: Columns },
         { type: "group", label: "Group", icon: Group },
         { type: "row", label: "Row", icon: Rows },
@@ -77,7 +77,7 @@ const BlockPalette: React.FC<BlockPaletteProps> = ({ onAddBlock }) => {
                   key={item.type}
                   className="flex flex-col items-center justify-center 
                              bg-gray-100 hover:bg-gray-200 
-                             border rounded-lg p-3 text-xs text-center"
+                             border rounded-lg p-3 text-xs text-center siz"
                   onClick={() => onAddBlock(item.type)}
                 >
                   <Icon className="w-6 h-6 text-gray-600 mb-2" />

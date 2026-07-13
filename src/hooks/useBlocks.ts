@@ -96,16 +96,16 @@ const getDefaultBlockData = (type: string) => {
       return { src: "", alt: "" };
 
     case "gallery":
-      return { images: [""] };
+      return { urls: [""] };
 
     case "audio":
-      return { src: "" };
+      return { url: "" };
 
     case "video":
-      return { src: "" };
+      return { url: "" };
 
     case "cover":
-      return { image: "", text: "" };
+      return { url: "", text: "" };
 
     case "file":
       return { name: "", url: "" };
@@ -146,7 +146,7 @@ const getDefaultBlockData = (type: string) => {
         items: [{ title: "", content: "" }]
       };
 
-    case "buttons":
+    case "button":
       return {
         buttons: [{ label: "", url: "" }]
       };

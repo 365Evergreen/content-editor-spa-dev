@@ -5,17 +5,17 @@ import BlockToolbar from "../blocks/BlockToolbar";
 export interface EditorCanvasProps {
   blocks: any[];
   onUpdateBlock: (id: string, updated: Partial<any>) => void;
+  onAddBlock: (type: string) => void;
   onMoveBlock: (id: string, direction: "up" | "down") => void;
   onDeleteBlock: (id: string) => void;
-  onAddBlock: (type: string) => void;
 }
 
 const EditorCanvas: React.FC<EditorCanvasProps> = ({
   blocks,
   onUpdateBlock,
+  onAddBlock,
   onMoveBlock,
-  onDeleteBlock,
-  onAddBlock
+  onDeleteBlock
 }) => {
   return (
     <div className="w-full p-6 bg-gray-50 border rounded-lg">
@@ -59,7 +59,6 @@ const EditorCanvas: React.FC<EditorCanvasProps> = ({
             onMoveDown={() => onMoveBlock(block.id, "down")}
             onDelete={() => onDeleteBlock(block.id)}
           />
-
           <BlockRenderer
             block={block}
             onUpdate={onUpdateBlock}

@@ -1,0 +1,106 @@
+{
+    "version": 1,
+    "generatedAt": "2026-06-27T00:00:00Z",
+    "categories": [
+        {
+            "id": "power-platform",
+            "title": "Power Platform",
+            "slug": "power-platform",
+            "children": [
+                {
+                    "id": "power-automate",
+                    "title": "Power Automate",
+                    "slug": "power-automate"
+                },
+                {
+                    "id": "power-bi",
+                    "title": "Power BI",
+                    "slug": "power-bi"
+                },
+                {
+                    "id": "power-apps",
+                    "title": "Power Apps",
+                    "slug": "power-apps"
+                }
+            ]
+        },
+        {
+            "id": "microsoft-365",
+            "title": "Microsoft 365",
+            "slug": "microsoft-365",
+            "children": [
+                {
+                    "id": "sharepoint",
+                    "title": "SharePoint",
+                    "slug": "sharepoint"
+                },
+                {
+                    "id": "teams",
+                    "title": "Teams",
+                    "slug": "teams"
+                },
+                {
+                    "id": "microsoft-graph",
+                    "title": "Microsoft Graph",
+                    "slug": "microsoft-graph"
+                }
+            ]
+        },
+        {
+            "id": "azure",
+            "title": "Azure",
+            "slug": "azure",
+            "children": [
+                {
+                    "id": "azure-functions",
+                    "title": "Azure Functions",
+                    "slug": "azure-functions"
+                },
+                {
+                    "id": "azure-logic-apps",
+                    "title": "Azure Logic Apps",
+                    "slug": "azure-logic-apps"
+                },
+                {
+                    "id": "azure-storage",
+                    "title": "Azure Storage",
+                    "slug": "azure-storage"
+                }
+            ]
+        },
+        {
+            "id": "devops",
+            "title": "DevOps",
+            "slug": "devops",
+            "children": [
+                {
+                    "id": "azure-devops",
+                    "title": "Azure DevOps",
+                    "slug": "azure-devops"
+                },
+                {
+                    "id": "github",
+                    "title": "GitHub",
+                    "slug": "github"
+                }
+            ]
+        },
+        {
+            "id": "ai",
+            "title": "AI",
+            "slug": "ai",
+            "children": [
+                {
+                    "id": "openai",
+                    "title": "OpenAI",
+                    "slug": "openai"
+                },
+                {
+                    "id": "azure-ai",
+                    "title": "Azure AI",
+                    "slug": "azure-ai"
+                }
+            ]
+        }
+    ]
+}

@@ -50,6 +50,13 @@ const TextRenderer: React.FC<TextRendererProps> = ({ block, onUpdate, onFocus })
         />
       );
 
+    case "table":
+      return (
+        <div className="text-gray-500 italic">
+          Table block rendering is not implemented yet.
+        </div>
+      );  
+
     default:
       return (
         <div className="text-red-600">

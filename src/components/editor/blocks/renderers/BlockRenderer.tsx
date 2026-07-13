@@ -20,6 +20,8 @@ const BlockRenderer: React.FC<BlockRendererProps> = ({ block, onUpdate, onFocus 
     case "paragraph":
     case "heading":
     case "list":
+    case "code":
+    case "table":
       return (
         <TextRenderer
           block={block}
@@ -32,11 +34,16 @@ const BlockRenderer: React.FC<BlockRendererProps> = ({ block, onUpdate, onFocus 
     // MEDIA DOMAIN
     //
     case "image":
+    case "gallery":
+    case "audio":
+    case "video":
+    case "cover":
+    case "file":
       return (
         <MediaRenderer
           block={block}
           onUpdate={onUpdate}
-          onFocus={onFocus}
+          mediaLibrary={[]}
         />
       );
 

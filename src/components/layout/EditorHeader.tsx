@@ -6,6 +6,7 @@ export interface EditorHeaderProps {
   children?: React.ReactNode; // optional toolbar content
 }
 
+
 const EditorHeader: React.FC<EditorHeaderProps> = ({
   onToggleLeft,
   onToggleRight,

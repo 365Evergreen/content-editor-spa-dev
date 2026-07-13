@@ -1,96 +1,160 @@
-import React from "react";
+import React, { useState } from "react";
+import { useCategories } from "../../hooks/useCategories";
+import { slugify } from "../../utils/slugify";
+import MediaPicker from "../editor/blocks/types/media/MediaPicker";
 
 export interface Metadata {
   title: string;
   slug: string;
   category: string;
   featuredImage: string;
-  type: string;
-  status: string;
+  status: "draft" | "published";
 }
 
 export interface MetadataPanelProps {
   metadata: Metadata;
-  setMetadata: (meta: Metadata) => void;
-  onPublish: () => void;
+  onUpdateMetadata: (updated: Partial<Metadata>) => void;
+  mediaLibrary: string[];
 }
+
+const CategoryOption = ({
+  node,
+  level = 0
+}: {
+  node: any;
+  level?: number;
+}) => (
+  <>
+    <option value={node.id}>
+      {"—".repeat(level)} {node.name}
+    </option>
+
+    {node.children.map((child: any) => (
+      <CategoryOption key={child.id} node={child} level={level + 1} />
+    ))}
+  </>
+);
 
 const MetadataPanel: React.FC<MetadataPanelProps> = ({
   metadata,
-  setMetadata,
-  onPublish
+  onUpdateMetadata,
+  mediaLibrary
 }) => {
-  const update = (field: keyof Metadata, value: string) => {
-    setMetadata({ ...metadata, [field]: value });
+  const categories = useCategories();
+  const [slugLocked, setSlugLocked] = useState(false);
+  const [showPicker, setShowPicker] = useState(false);
+
+  const updateTitle = (title: string) => {
+    onUpdateMetadata({
+      title,
+      slug: slugLocked ? metadata.slug : slugify(title)
+    });
+  };
+
+  const updateSlug = (slug: string) => {
+    setSlugLocked(true);
+    onUpdateMetadata({ slug });
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 p-4 border rounded-lg bg-white">
 
-      {/* Metadata Fields */}
-      <div className="p-4 bg-white border rounded-lg">
-        <h2 className="text-lg text-black font-semibold mb-4">Metadata</h2>
-
+      {/* Title */}
+      <div>
+        <label className="block text-sm font-medium mb-1">Title</label>
         <input
           type="text"
-          className="w-full border rounded px-2 py-1 mb-3"
-          placeholder="Title"
+          className="w-full border rounded p-2"
           value={metadata.title}
-          onChange={(e) => update("title", e.target.value)}
+          onChange={(e) => updateTitle(e.target.value)}
         />
+      </div>
 
+      {/* Slug */}
+      <div>
+        <label className="block text-sm font-medium mb-1">Slug</label>
         <input
           type="text"
-          className="w-full border rounded px-2 py-1 mb-3"
-          placeholder="Slug"
+          className="w-full border rounded p-2"
           value={metadata.slug}
-          onChange={(e) => update("slug", e.target.value)}
+          onChange={(e) => updateSlug(e.target.value)}
         />
+      </div>
 
-        <input
-          type="text"
-          className="w-full border rounded px-2 py-1 mb-3"
-          placeholder="Category"
-          value={metadata.category}
-          onChange={(e) => update("category", e.target.value)}
-        />
-
-        <input
-          type="text"
-          className="w-full border rounded px-2 py-1 mb-3"
-          placeholder="Featured Image URL"
-          value={metadata.featuredImage}
-          onChange={(e) => update("featuredImage", e.target.value)}
-        />
-
-        <input
-          type="text"
-          className="w-full border rounded px-2 py-1 mb-3"
-          placeholder="Type"
-          value={metadata.type}
-          onChange={(e) => update("type", e.target.value)}
-        />
-
+      {/* Category */}
+      <div>
+        <label className="block text-sm font-medium mb-1">Category</label>
         <select
-          className="w-full border rounded px-2 py-1"
+          className="w-full border rounded p-2"
+          value={metadata.category}
+          onChange={(e) =>
+            onUpdateMetadata({ category: e.target.value })
+          }
+        >
+          <option value="">Select category</option>
+
+          {categories.map((root) => (
+            <CategoryOption key={root.id} node={root} />
+          ))}
+        </select>
+      </div>
+
+      {/* Featured Image */}
+      <div>
+        <label className="block text-sm font-medium mb-1">
+          Featured Image
+        </label>
+
+        {metadata.featuredImage ? (
+          <div className="relative">
+            <img
+              src={metadata.featuredImage}
+              className="w-full h-40 object-cover rounded"
+            />
+            <button
+              className="absolute top-2 right-2 bg-white p-1 rounded shadow"
+              onClick={() =>
+                onUpdateMetadata({ featuredImage: "" })
+              }
+            >
+              Remove
+            </button>
+          </div>
+        ) : (
+          <button
+            className="px-3 py-2 bg-gray-200 rounded hover:bg-gray-300"
+            onClick={() => setShowPicker(true)}
+          >
+            Select Image
+          </button>
+        )}
+
+        {showPicker && (
+          <MediaPicker
+            mediaLibrary={mediaLibrary}
+            onSelect={(url) => {
+              onUpdateMetadata({ featuredImage: url });
+              setShowPicker(false);
+            }}
+            onClose={() => setShowPicker(false)}
+          />
+        )}
+      </div>
+
+      {/* Status */}
+      <div>
+        <label className="block text-sm font-medium mb-1">Status</label>
+        <select
+          className="w-full border rounded p-2"
           value={metadata.status}
-          onChange={(e) => update("status", e.target.value)}
+          onChange={(e) =>
+            onUpdateMetadata({ status: e.target.value as any })
+          }
         >
           <option value="draft">Draft</option>
           <option value="published">Published</option>
         </select>
       </div>
-
-      {/* Publish Button */}
-      <div className="p-4 bg-white border rounded-lg">
-        <button
-          className="w-full px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-          onClick={onPublish}
-        >
-          Publish
-        </button>
-      </div>
-
     </div>
   );
 };

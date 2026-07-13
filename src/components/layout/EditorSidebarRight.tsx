@@ -6,7 +6,7 @@ export interface EditorSidebarRightProps {
 
 const EditorSidebarRight: React.FC<EditorSidebarRightProps> = ({ children }) => {
   return (
-    <aside className="col-span-3 bg-white border p-4 overflow-auto">
+    <aside className="col-span-2 bg-white border p-4 overflow-auto">
       {children}
     </aside>
   );
