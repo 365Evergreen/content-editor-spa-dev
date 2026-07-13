@@ -1,11 +1,3 @@
-Here’s a **clean, production‑ready README.md** for your repo — structured for a real engineering audience, aligned with your architecture, and using **pnpm** as the preferred package manager.
-
-It avoids SharePoint‑specific clutter, keeps the SPA front‑and‑centre, and documents the entire system clearly for contributors.
-
-You can drop this directly into your repository root.
-
----
-
 # **README.md**
 
 # Headless CMS Authoring Platform  
@@ -229,18 +221,3 @@ chore: update dependencies
 - Full static site generator integration (Astro/Next.js)
 
 ---
-
-## **License**
-MIT (or your preferred license)
-
----
-
-If you want, I can also generate:
-
-- a **CONTRIBUTING.md**  
-- a **docs/architecture.md**  
-- a **docs/setup-sharepoint.md**  
-- a **docs/power-automate-flow.md**  
-- a **docs/index-regeneration.md**  
-
-Just tell me which one you want next.
