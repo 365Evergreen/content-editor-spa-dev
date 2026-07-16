@@ -17,8 +17,8 @@ export const publishToBlob = async (
   const sasToken = rawSasToken.replace(/^\?/, "");
   const defaultUrl =
     contentType === "page"
-      ? "https://cdn.365evergreen.com/content/pages"
-      : "https://cdn.365evergreen.com/content/posts";
+      ? "https://sa365evergreenwebsite.blob.core.windows.net/content/pages"
+      : "https://sa365evergreenwebsite.blob.core.windows.net/content/posts";
 
   const normalizedContainerUrl = envContainerUrl
     ? envContainerUrl.replace(/\/$/, "")

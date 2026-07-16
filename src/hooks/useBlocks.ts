@@ -65,6 +65,7 @@ const useBlocks = () => {
 
   return {
     blocks,
+    setBlocks,
     addBlock,
     updateBlock,
     moveBlock,

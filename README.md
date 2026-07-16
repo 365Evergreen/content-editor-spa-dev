@@ -118,6 +118,19 @@ Outputs production assets to `/dist`.
 
 ---
 
+## **SharePoint editor launch link**
+
+If editors should open a specific post or page from SharePoint, use the app URL with the item `id` query string:
+
+```text
+https://kind-beach-0c3865800.7.azurestaticapps.net?postid=00027
+```
+
+- The app will load the matching item from `content/pages/index.json` or `content/posts/index.json`
+- Use the same ID stored in SharePoint metadata for pages/posts
+
+---
+
 ## **Project Structure**
 
 ```

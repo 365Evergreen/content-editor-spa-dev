@@ -10,7 +10,43 @@
       "allowedRoles": ["anonymous"]
     },
     {
-      "route": "/editor/*",
+      "route": "/assets/*",
+      "allowedRoles": ["anonymous"]
+    },
+    {
+      "route": "/*.css",
+      "allowedRoles": ["anonymous"]
+    },
+    {
+      "route": "/*.js",
+      "allowedRoles": ["anonymous"]
+    },
+    {
+      "route": "/*.ico",
+      "allowedRoles": ["anonymous"]
+    },
+    {
+      "route": "/*.svg",
+      "allowedRoles": ["anonymous"]
+    },
+    {
+      "route": "/signin",
+      "allowedRoles": ["anonymous"]
+    },
+    {
+      "route": "/signin/*",
+      "allowedRoles": ["anonymous"]
+    },
+    {
+      "route": "/.auth/*",
+      "allowedRoles": ["anonymous"]
+    },
+    {
+      "route": "/",
+      "allowedRoles": ["authenticated"]
+    },
+    {
+      "route": "/*",
       "allowedRoles": ["authenticated"]
     }
   ]
