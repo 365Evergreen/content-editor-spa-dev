@@ -3,8 +3,9 @@ import EditorLayout from "../components/layout/EditorLayout";
 import EditorCanvas from "../components/editor/EditorCanvas/EditorCanvas";
 import BlockPalette from "../components/editor/BlockPalette";
 import useBlocks from "../hooks/useBlocks";
-import MetadataPanel, { type Metadata } from "../components/metadata/MetadataPanel";
 import { publishToBlob } from "../services/publishToBlob";
+import type { Metadata } from "./../models/Metadata";
+import MetadataPanel from "../components/metadata/MetadataPanel";
 
 const EditorPage: React.FC = () => {
   //
@@ -22,11 +23,13 @@ const EditorPage: React.FC = () => {
   // METADATA STATE (placeholder)
   //
   const [metadata, setMetadata] = React.useState<Metadata>({
+    id: "",
     title: "",
     slug: "",
     category: "",
     featuredImage: "",
-    status: "draft"
+    status: "draft",
+    contentType: "post"
   });
   const [isPublishing, setIsPublishing] = React.useState(false);
 

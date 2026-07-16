@@ -1,15 +1,8 @@
 import React, { useState } from "react";
+import type { Metadata } from "../../models/Metadata";
 import { useCategories } from "../../hooks/useCategories";
 import { slugify } from "../../utils/slugify";
 import MediaPicker from "../editor/blocks/types/media/MediaPicker";
-
-export interface Metadata {
-  title: string;
-  slug: string;
-  category: string;
-  featuredImage: string;
-  status: "draft" | "published";
-}
 
 export interface MetadataPanelProps {
   metadata: Metadata;
@@ -139,6 +132,21 @@ const MetadataPanel: React.FC<MetadataPanelProps> = ({
             onClose={() => setShowPicker(false)}
           />
         )}
+      </div>
+
+      {/* Content Type */}
+      <div>
+        <label className="block text-sm font-medium mb-1">Content Type</label>
+        <select
+          className="w-full border rounded p-2"
+          value={metadata.contentType}
+          onChange={(e) =>
+            onUpdateMetadata({ contentType: e.target.value as Metadata["contentType"] })
+          }
+        >
+          <option value="post">Post</option>
+          <option value="page">Page</option>
+        </select>
       </div>
 
       {/* Status */}

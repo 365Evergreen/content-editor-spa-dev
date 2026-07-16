@@ -1,17 +1,36 @@
-export const publishToBlob = async (
-  post: any,
-  slug: string
-): Promise<string> => {
-  const containerUrl =
-    import.meta.env.VITE_AZURE_BLOB_CONTAINER_URL ||
-    "https://sa365evergreenwebsite.blob.core.windows.net/content/posts";
-  const sasToken = import.meta.env.VITE_AZURE_BLOB_SAS_TOKEN;
+import type { Metadata } from "../models/Metadata";
 
-  if (!sasToken) {
+export const publishToBlob = async (
+  post: { metadata: Metadata; blocks: any[] },
+  id: string
+): Promise<string> => {
+  const { contentType } = post.metadata;
+
+  const envContainerUrl = import.meta.env.VITE_AZURE_BLOB_CONTAINER_URL;
+  const rawSasToken =
+    import.meta.env.VITE_AZURE_BLOB_SAS_TOKEN || import.meta.env.VITE_SAS;
+
+  if (!rawSasToken) {
     throw new Error("Missing VITE_AZURE_BLOB_SAS_TOKEN environment variable.");
   }
 
-  const blobPath = `${slug}/post.json`;
+  const sasToken = rawSasToken.replace(/^\?/, "");
+  const defaultUrl =
+    contentType === "page"
+      ? "https://cdn.365evergreen.com/content/pages"
+      : "https://cdn.365evergreen.com/content/posts";
+
+  const normalizedContainerUrl = envContainerUrl
+    ? envContainerUrl.replace(/\/$/, "")
+    : defaultUrl;
+
+  const containerUrl = envContainerUrl
+    ? /(\/pages|\/posts)$/.test(normalizedContainerUrl)
+      ? normalizedContainerUrl
+      : `${normalizedContainerUrl}/${contentType === "page" ? "pages" : "posts"}`
+    : defaultUrl;
+
+  const blobPath = `${id}.json`;
   const url = `${containerUrl}/${blobPath}?${sasToken}`;
 
   const response = await fetch(url, {
