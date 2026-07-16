@@ -1,8 +1,9 @@
 import { useEffect } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 export default function SignInPage() {
   const location = useLocation()
+  const navigate = useNavigate()
 
   useEffect(() => {
     const params = new URLSearchParams(location.search)
@@ -24,8 +25,22 @@ export default function SignInPage() {
     const loginUrl =
       `/.auth/login/aad?post_login_redirect_uri=${encodeURIComponent(returnTo)}`
 
-    window.location.assign(loginUrl)
-  }, [location.pathname, location.search])
+    const checkAuthentication = async () => {
+      try {
+        const response = await fetch('/.auth/me', { cache: 'no-store' })
+        if (response.ok) {
+          navigate('/editor', { replace: true })
+          return
+        }
+      } catch (error) {
+        console.warn('Auth check failed:', error)
+      }
+
+      window.location.assign(loginUrl)
+    }
+
+    checkAuthentication()
+  }, [location.pathname, location.search, navigate])
 
   return (
     <div className="page-shell page-shell--narrow">

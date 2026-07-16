@@ -109,16 +109,16 @@ const EditorPage: React.FC = () => {
       }
 
       const choosePath = (type: Metadata["contentType"]) =>
-        `${contentRootUrl}/${type}s/${id}.json`;
+        `${contentRootUrl}/${type}s/${id}/post.json`
 
-      let response: Response | null = null;
+      let response: Response | null = null
 
       if (contentType) {
-        response = await fetch(choosePath(contentType));
+        response = await fetch(choosePath(contentType))
       } else {
-        response = await fetch(`${contentRootUrl}/pages/${id}.json`);
+        response = await fetch(`${contentRootUrl}/pages/${id}/post.json`)
         if (!response.ok) {
-          response = await fetch(`${contentRootUrl}/posts/${id}.json`);
+          response = await fetch(`${contentRootUrl}/posts/${id}/post.json`)
           if (response.ok) contentType = "post";
         } else {
           contentType = "page";
