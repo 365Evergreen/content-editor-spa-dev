@@ -85,7 +85,9 @@ const MetadataPanel: React.FC<MetadataPanelProps> = ({
           }
         >
           <option value="">Select category</option>
-
+          {metadata.category && !categories.some((c) => c.id === metadata.category) && (
+            <option value={metadata.category}>{metadata.category}</option>
+          )}
           {categories.map((root) => (
             <CategoryOption key={root.id} node={root} />
           ))}

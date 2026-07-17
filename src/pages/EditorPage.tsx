@@ -44,22 +44,7 @@ const EditorPage: React.FC = () => {
 
   const contentRootUrl =
     import.meta.env.VITE_AZURE_BLOB_CONTAINER_URL ||
-    "https://cdn.365evergreen.com/content";
-
-  const fetchIndex = async (path: string) => {
-    const response = await fetch(path);
-    if (!response.ok) return null;
-    return response.json();
-  };
-
-  const findItemById = (items: any[] = [], id: string) =>
-    items.find(
-      (item) =>
-        item?.id === id ||
-        item?.pageId === id ||
-        item?.slug === id ||
-        item?.guid === id
-    );
+    "https://sa365evergreenwebsite.blob.core.windows.net/content";
 
   const normalizeMetadata = (
     loadedMetadata: any,
@@ -68,6 +53,8 @@ const EditorPage: React.FC = () => {
     const featuredImage =
       typeof loadedMetadata.featuredImage === "string"
         ? loadedMetadata.featuredImage
+        : typeof loadedMetadata.thumbnail === "string"
+        ? loadedMetadata.thumbnail
         : loadedMetadata.featuredImage?.url || "";
 
     return {
@@ -80,9 +67,13 @@ const EditorPage: React.FC = () => {
         "",
       title: loadedMetadata.title ?? "",
       slug: loadedMetadata.slug ?? loadedMetadata.path ?? "",
-      category: loadedMetadata.category ?? loadedMetadata.tags?.[0] ?? "",
+      category:
+        loadedMetadata.category ||
+        loadedMetadata.tags?.[0] ||
+        loadedMetadata.categories?.[0] ||
+        "",
       featuredImage,
-      status: loadedMetadata.status ?? "draft",
+      status: loadedMetadata.status ?? loadedMetadata.state ?? "draft",
       contentType
     };
   };
@@ -90,56 +81,44 @@ const EditorPage: React.FC = () => {
   const loadItemById = async (id: string) => {
     try {
       setErrorMessage("");
-      const [pagesIndex, postsIndex] = await Promise.all([
-        fetchIndex(`${contentRootUrl}/pages/index.json`),
-        fetchIndex(`${contentRootUrl}/posts/index.json`)
-      ]);
+      console.debug("loadItemById", { id, contentRootUrl });
 
-      let contentType: Metadata["contentType"] | undefined;
-      let indexEntry: any;
+      const tryFetch = async (path: string) => {
+        console.debug("trying content fetch", path);
+        const res = await fetch(path);
+        return res.ok ? res : null;
+      };
 
-      if (pagesIndex) {
-        indexEntry = findItemById(pagesIndex, id);
-        if (indexEntry) contentType = "page";
+      const pagePath = `${contentRootUrl}/pages/${id}/post.json`;
+      const postPath = `${contentRootUrl}/posts/${id}/post.json`;
+
+      let response = await tryFetch(postPath);
+      let contentType: Metadata["contentType"] = "post";
+      let attemptedPaths = [postPath];
+
+      if (!response) {
+        response = await tryFetch(pagePath);
+        attemptedPaths.push(pagePath);
+        if (response) contentType = "page";
       }
 
-      if (!contentType && postsIndex) {
-        indexEntry = findItemById(postsIndex, id);
-        if (indexEntry) contentType = "post";
-      }
-
-      const choosePath = (type: Metadata["contentType"]) =>
-        `${contentRootUrl}/${type}s/${id}/post.json`
-
-      let response: Response | null = null
-
-      if (contentType) {
-        response = await fetch(choosePath(contentType))
-      } else {
-        response = await fetch(`${contentRootUrl}/pages/${id}/post.json`)
-        if (!response.ok) {
-          response = await fetch(`${contentRootUrl}/posts/${id}/post.json`)
-          if (response.ok) contentType = "post";
-        } else {
-          contentType = "page";
-        }
-      }
-
-      if (!response || !response.ok) {
+      if (!response) {
         setErrorMessage(
           "Unable to load the selected post/page. Please open the app from the SharePoint list again."
         );
-        console.warn("Could not load content for id:", id);
+        console.warn("Could not load content for id:", id, { attemptedPaths });
         return;
       }
 
       const data = await response.json();
       const loadedMetadata = data.metadata ?? data;
 
-      setMetadata(normalizeMetadata(loadedMetadata, contentType ?? "post"));
+      setMetadata(normalizeMetadata(loadedMetadata, contentType));
       setBlocks(data.blocks ?? []);
+      console.debug("loaded content", { id, contentType, loadedMetadata });
     } catch (error) {
       console.error("Error loading content by ID", error);
+      setErrorMessage("Error loading content by ID. Check the console for details.");
     }
   };
 
@@ -150,6 +129,8 @@ const EditorPage: React.FC = () => {
       params.get("postid") ||
       params.get("pageid") ||
       params.get("guid");
+
+    console.debug("EditorPage mounted", { search: location.search, id });
 
     if (id) {
       loadItemById(id);
