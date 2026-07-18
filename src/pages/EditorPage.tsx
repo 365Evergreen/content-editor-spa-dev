@@ -8,6 +8,46 @@ import { publishToBlob } from "../services/publishToBlob";
 import type { Metadata } from "./../models/Metadata";
 import MetadataPanel from "../components/metadata/MetadataPanel";
 
+const parseJsonContent = (text: string) => {
+  const trimmed = text.trim();
+  if (!trimmed) {
+    return { metadata: {}, blocks: [] };
+  }
+
+  try {
+    const parsed = JSON.parse(trimmed);
+
+    if (parsed && typeof parsed === "object") {
+      return {
+        metadata: parsed.metadata ?? parsed,
+        blocks: Array.isArray(parsed.blocks) ? parsed.blocks : []
+      };
+    }
+  } catch (error) {
+    const start = trimmed.indexOf("{");
+    const end = trimmed.lastIndexOf("}");
+    const candidate = trimmed.slice(start >= 0 ? start : 0, end >= 0 ? end : trimmed.length).trim();
+
+    if (!candidate) {
+      return { metadata: {}, blocks: [] };
+    }
+
+    try {
+      const parsed = JSON.parse(candidate);
+      if (parsed && typeof parsed === "object") {
+        return {
+          metadata: parsed.metadata ?? parsed,
+          blocks: Array.isArray(parsed.blocks) ? parsed.blocks : []
+        };
+      }
+    } catch {
+      // Fall back to a best-effort metadata object for malformed content.
+    }
+  }
+
+  return { metadata: {}, blocks: [] };
+};
+
 const EditorPage: React.FC = () => {
   //
   // BLOCK STATE
@@ -54,7 +94,7 @@ const EditorPage: React.FC = () => {
 
   const contentRootUrl =
     import.meta.env.VITE_AZURE_BLOB_CONTAINER_URL ||
-    "https://sa365evergreenwebsite.blob.core.windows.net/contentdrafts";
+    "https://cdn.365evergreen.com/contentdrafts/contentdrafts";
   const normalizedContentRootUrl = contentRootUrl
     .replace(/\/$/, "")
     .replace(/\/(pages|posts)$/i, "");
@@ -149,18 +189,17 @@ const EditorPage: React.FC = () => {
       }
 
       const text = await response.text();
-      let data: any;
-      try {
-        data = JSON.parse(text);
-      } catch (parseError) {
-        console.error("Failed to parse JSON content", { path: response.url, text, parseError });
-        setErrorMessage("Unable to parse content JSON. Check the console for details.");
+      const parsedContent = parseJsonContent(text);
+      const loadedMetadata = parsedContent.metadata ?? {};
+
+      if (!Object.keys(loadedMetadata).length && !parsedContent.blocks.length) {
+        console.warn("Loaded content was empty or malformed", { path: response.url, text });
+        setErrorMessage("The stored content could not be parsed. Please review the JSON in the blob container.");
         return;
       }
 
-      const loadedMetadata = data.metadata ?? data;
       setMetadata(normalizeMetadata(loadedMetadata, contentType));
-      setBlocks(data.blocks ?? []);
+      setBlocks(parsedContent.blocks);
       console.debug("loaded content", { id, contentType, loadedMetadata });
     } catch (error) {
       console.error("Error loading content by ID", error);
