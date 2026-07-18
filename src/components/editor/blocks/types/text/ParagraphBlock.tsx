@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Bold,
   Italic,
@@ -29,8 +29,20 @@ const ParagraphBlock: React.FC<ParagraphBlockProps> = ({
   onFocus
 }) => {
   const [showToolbar, setShowToolbar] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const editableRef = useRef<HTMLDivElement>(null);
   const selectionRef = useRef<Range | null>(null);
+
+  useEffect(() => {
+    const editable = editableRef.current;
+    if (!editable) return;
+    if (document.activeElement === editable) return;
+
+    const nextHtml = block.text || "";
+    if (editable.innerHTML !== nextHtml) {
+      editable.innerHTML = nextHtml;
+    }
+  }, [block.text]);
 
   const saveSelection = () => {
     const sel = window.getSelection();
@@ -48,9 +60,12 @@ const ParagraphBlock: React.FC<ParagraphBlockProps> = ({
   };
 
   const applyFormat = (command: string, value?: string) => {
-    ref.current?.focus();
+    editableRef.current?.focus();
     restoreSelection();
     document.execCommand(command, false, value);
+    if (editableRef.current) {
+      onUpdate(block.id, { text: editableRef.current.innerHTML });
+    }
     saveSelection();
   };
 
@@ -59,7 +74,33 @@ const ParagraphBlock: React.FC<ParagraphBlockProps> = ({
   };
 
   const updateAlign = (align: "left" | "center" | "right") => {
+    const commandMap: Record<"left" | "center" | "right", string> = {
+      left: "justifyLeft",
+      center: "justifyCenter",
+      right: "justifyRight"
+    };
+
+    applyFormat(commandMap[align]);
     onUpdate(block.id, { align });
+  };
+
+  const toggleBulletList = () => {
+    applyFormat("insertUnorderedList");
+  };
+
+  const insertLink = () => {
+    const url = prompt("Enter link URL");
+    if (!url) return;
+    applyFormat("createLink", url);
+  };
+
+  const toggleQuote = () => {
+    applyFormat("formatBlock", "blockquote");
+  };
+
+  const clearFormatting = () => {
+    applyFormat("removeFormat");
+    applyFormat("unlink");
   };
 
   return (
@@ -69,7 +110,7 @@ const ParagraphBlock: React.FC<ParagraphBlockProps> = ({
         setShowToolbar(true);
         onFocus?.();
       }}
-      ref={ref}
+      ref={containerRef}
     >
       {/* Toolbar */}
       {showToolbar && (
@@ -107,13 +148,6 @@ const ParagraphBlock: React.FC<ParagraphBlockProps> = ({
             <AlignLeft className="w-4 h-4" />
           </button>
 
-          <button
-            className="p-1 hover:bg-gray-100 rounded"
-            onClick={() => applyFormat("underline")}
-          >
-            <Underline className="w-4 h-4" />
-          </button>
-
 
           <button
             className="p-1 hover:bg-gray-100 rounded"
@@ -131,27 +165,21 @@ const ParagraphBlock: React.FC<ParagraphBlockProps> = ({
 
           <button
             className="p-1 hover:bg-gray-100 rounded"
-            onClick={() => {
-              // list logic
-            }}
+            onClick={toggleBulletList}
           >
             <List className="w-4 h-4" />
           </button>
 
           <button
             className="p-1 hover:bg-gray-100 rounded"
-            onClick={() => {
-              // link logic
-            }}
+            onClick={insertLink}
           >
             <Link className="w-4 h-4" />
           </button>
          
           <button
             className="p-1 hover:bg-gray-100 rounded"
-            onClick={() => {
-              // quote logic
-            }}
+            onClick={toggleQuote}
           >
             <Quote className="w-4 h-4" />
           </button>
@@ -159,9 +187,7 @@ const ParagraphBlock: React.FC<ParagraphBlockProps> = ({
 
           <button
             className="p-1 hover:bg-gray-100 rounded"
-            onClick={() => {
-              // more menu
-            }}
+            onClick={clearFormatting}
           >
             <MoreHorizontal className="w-4 h-4" />
           </button>
@@ -171,25 +197,28 @@ const ParagraphBlock: React.FC<ParagraphBlockProps> = ({
 
       {/* Editable paragraph */}
       <div
+        ref={editableRef}
         contentEditable
         suppressContentEditableWarning
         dir="ltr"
         className={`w-full outline-none bg-white p-2 rounded-md border 1px border-gray-300 text-left
               ${block.align === "center" ? "text-center" : ""}
               ${block.align === "right" ? "text-right" : ""}`}
-        onInput={(e) => onUpdate(block.id, { text: e.currentTarget.innerHTML })}
+        onInput={(e) => {
+          onUpdate(block.id, { text: e.currentTarget.innerHTML });
+          saveSelection();
+        }}
         onFocus={() => {
           setShowToolbar(true);
           saveSelection();
           onFocus?.();
         }}
         onBlur={(e) => {
-          if (ref.current?.contains(e.relatedTarget as Node)) {
+          if (containerRef.current?.contains(e.relatedTarget as Node)) {
             return;
           }
           setShowToolbar(false);
         }}
-        dangerouslySetInnerHTML={{ __html: block.text }}
       />
 
     </div>

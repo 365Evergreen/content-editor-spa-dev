@@ -1,4 +1,5 @@
 import React from "react";
+import { AlignCenter, AlignLeft, AlignRight, Heading1, Heading2, Heading3, Heading4 } from "lucide-react";
 
 export interface HeadingBlockProps {
   block: {
@@ -6,6 +7,7 @@ export interface HeadingBlockProps {
     type: "heading";
     level: number; // 1–4
     text: string;
+    align?: "left" | "center" | "right";
   };
   onUpdate: (id: string, updated: Partial<HeadingBlockProps["block"]>) => void;
   onFocus?: () => void;
@@ -20,6 +22,14 @@ const HeadingBlock: React.FC<HeadingBlockProps> = ({ block, onUpdate, onFocus })
     onUpdate(block.id, { level: Number(e.target.value) });
   };
 
+  const setLevel = (level: 1 | 2 | 3 | 4) => {
+    onUpdate(block.id, { level });
+  };
+
+  const setAlign = (align: "left" | "center" | "right") => {
+    onUpdate(block.id, { align });
+  };
+
   const headingClass = {
     1: "text-3xl font-bold",
     2: "text-2xl font-semibold",
@@ -29,7 +39,32 @@ const HeadingBlock: React.FC<HeadingBlockProps> = ({ block, onUpdate, onFocus })
 
   return (
     <div className="py-3" onClick={onFocus}>
-      <div className="flex gap-2 mb-2">
+      <div className="mb-2 flex items-center gap-2 rounded-lg border bg-white px-2 py-1">
+        <button type="button" className="rounded p-1 hover:bg-gray-100" onClick={() => setLevel(1)} title="Heading 1">
+          <Heading1 className="h-4 w-4" />
+        </button>
+        <button type="button" className="rounded p-1 hover:bg-gray-100" onClick={() => setLevel(2)} title="Heading 2">
+          <Heading2 className="h-4 w-4" />
+        </button>
+        <button type="button" className="rounded p-1 hover:bg-gray-100" onClick={() => setLevel(3)} title="Heading 3">
+          <Heading3 className="h-4 w-4" />
+        </button>
+        <button type="button" className="rounded p-1 hover:bg-gray-100" onClick={() => setLevel(4)} title="Heading 4">
+          <Heading4 className="h-4 w-4" />
+        </button>
+
+        <div className="mx-1 h-4 border-l" />
+        <button type="button" className="rounded p-1 hover:bg-gray-100" onClick={() => setAlign("left")} title="Align left">
+          <AlignLeft className="h-4 w-4" />
+        </button>
+        <button type="button" className="rounded p-1 hover:bg-gray-100" onClick={() => setAlign("center")} title="Align center">
+          <AlignCenter className="h-4 w-4" />
+        </button>
+        <button type="button" className="rounded p-1 hover:bg-gray-100" onClick={() => setAlign("right")} title="Align right">
+          <AlignRight className="h-4 w-4" />
+        </button>
+
+        <div className="mx-1 h-4 border-l" />
         <select
           className="border rounded px-2 py-1 text-sm"
           value={block.level}
@@ -44,7 +79,8 @@ const HeadingBlock: React.FC<HeadingBlockProps> = ({ block, onUpdate, onFocus })
 
       <input
         type="text"
-        className={`w-full bg-transparent outline-none ${headingClass}`}
+        className={`w-full bg-transparent outline-none ${headingClass} ${block.align === "center" ? "text-center" : block.align === "right" ? "text-right" : "text-left"
+          }`}
         placeholder="Heading text..."
         value={block.text}
         onChange={handleTextChange}

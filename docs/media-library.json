@@ -1,0 +1,20 @@
+{
+    "version": 1,
+    "generatedAt": "2026-06-27T00:00:00Z",
+    "items": [
+        {
+            "id": "GUID",
+            "title": "All media must have a title, type, alt text, and url",
+            "type": "image",
+            "alt": "Power Platform",
+            "url": "https://sa365evergreenwebsite.blob.core.windows.net/contentdrafts/<type>/<id>/<GUID>.<extension>"
+        },
+        {
+            "id": "GUID",
+            "title": "All media must have a title, type, alt text, and url",
+            "type": "video",
+            "alt": "",
+            "url": "https://sa365evergreenwebsite.blob.core.windows.net/contentdrafts/<type>/<id>/<GUID>.<extension>"
+        }
+    ]
+}

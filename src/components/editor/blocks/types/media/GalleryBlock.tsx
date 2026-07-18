@@ -13,23 +13,52 @@ const GalleryBlock: React.FC<GalleryBlockProps> = ({
   onUpdate,
   mediaLibrary
 }) => {
+  const [showToolbar, setShowToolbar] = useState(false);
   const [showPicker, setShowPicker] = useState(false);
+  const containerRef = React.useRef<HTMLDivElement>(null);
 
   const addImage = (url: string) => {
     onUpdate(block.id, { urls: [...block.urls, url] });
     setShowPicker(false);
   };
 
+  const handleBlur = (event: React.FocusEvent<HTMLDivElement>) => {
+    if (containerRef.current?.contains(event.relatedTarget as Node)) {
+      return;
+    }
+    setShowToolbar(false);
+  };
+
   return (
-    <div className="relative border rounded-lg p-4 bg-white">
+    <div
+      ref={containerRef}
+      className="relative border rounded-lg p-4 bg-white"
+      onClick={() => setShowToolbar(true)}
+      onFocusCapture={() => setShowToolbar(true)}
+      onBlurCapture={handleBlur}
+    >
       <div className="flex justify-between mb-3">
         <h3 className="font-semibold">Gallery</h3>
-        <button
-          className="p-1 hover:bg-gray-100 rounded"
-          onClick={() => setShowPicker(true)}
-        >
-          <Plus className="w-4 h-4" />
-        </button>
+        {showToolbar && (
+          <div className="flex items-center gap-1">
+            <button
+              type="button"
+              className="p-1 hover:bg-gray-100 rounded"
+              onClick={() => setShowPicker(true)}
+              title="Add image"
+            >
+              <Plus className="w-4 h-4" />
+            </button>
+            <button
+              type="button"
+              className="p-1 hover:bg-gray-100 rounded"
+              onClick={() => onUpdate(block.id, { urls: [] })}
+              title="Clear gallery"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        )}
       </div>
 
       {showPicker && (

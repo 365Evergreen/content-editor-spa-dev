@@ -65,7 +65,7 @@ const BlockPalette: React.FC<BlockPaletteProps> = ({ onAddBlock }) => {
     <div className="space-y-8">
       {categories.map((cat) => (
         <div key={cat.title}>
-          <h3 className="text-sm font-semibold text-gray-700 mb-3">
+          <h3 className="text-sm font-semibold text-gray-700 mb-3 text-left">
             {cat.title.toUpperCase()}
           </h3>
 
@@ -76,8 +76,8 @@ const BlockPalette: React.FC<BlockPaletteProps> = ({ onAddBlock }) => {
                 <button
                   key={item.type}
                   className="flex flex-col items-center justify-center 
-                             bg-gray-100 hover:bg-gray-200 
-                             border rounded-lg p-3 text-xs text-center siz"
+                             bg-gray-50 hover:bg-gray-200 
+                             border rounded-lg p-2 text-xs text-center height-20 width-25"
                   onClick={() => onAddBlock(item.type)}
                 >
                   <Icon className="w-6 h-6 text-gray-600 mb-2" />

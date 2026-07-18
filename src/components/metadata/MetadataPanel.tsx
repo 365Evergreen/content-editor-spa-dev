@@ -50,7 +50,7 @@ const MetadataPanel: React.FC<MetadataPanelProps> = ({
   };
 
   return (
-    <div className="space-y-6 p-4 border rounded-lg bg-white">
+    <div className="space-y-6 p-2 border rounded-sm bg-white">
 
       {/* Title */}
       <div>
@@ -74,25 +74,26 @@ const MetadataPanel: React.FC<MetadataPanelProps> = ({
         />
       </div>
 
-      {/* Category */}
-      <div>
-        <label className="block text-sm font-medium mb-1">Category</label>
-        <select
-          className="w-full border rounded p-2"
-          value={metadata.category}
-          onChange={(e) =>
-            onUpdateMetadata({ category: e.target.value })
-          }
-        >
-          <option value="">Select category</option>
-          {metadata.category && !categories.some((c) => c.id === metadata.category) && (
-            <option value={metadata.category}>{metadata.category}</option>
-          )}
-          {categories.map((root) => (
-            <CategoryOption key={root.id} node={root} />
-          ))}
-        </select>
-      </div>
+      {metadata.contentType === "post" && (
+        <div>
+          <label className="block text-sm font-medium mb-1">Category</label>
+          <select
+            className="w-full border rounded p-2"
+            value={metadata.category}
+            onChange={(e) =>
+              onUpdateMetadata({ category: e.target.value })
+            }
+          >
+            <option value="">Select category</option>
+            {metadata.category && !categories.some((c) => c.id === metadata.category) && (
+              <option value={metadata.category}>{metadata.category}</option>
+            )}
+            {categories.map((root) => (
+              <CategoryOption key={root.id} node={root} />
+            ))}
+          </select>
+        </div>
+      )}
 
       {/* Featured Image */}
       <div>
@@ -143,7 +144,10 @@ const MetadataPanel: React.FC<MetadataPanelProps> = ({
           className="w-full border rounded p-2"
           value={metadata.contentType}
           onChange={(e) =>
-            onUpdateMetadata({ contentType: e.target.value as Metadata["contentType"] })
+            onUpdateMetadata({
+              contentType: e.target.value as Metadata["contentType"],
+              category: e.target.value === "page" ? "" : metadata.category
+            })
           }
         >
           <option value="post">Post</option>

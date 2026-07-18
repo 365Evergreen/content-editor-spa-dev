@@ -22,8 +22,10 @@ const EditorPage: React.FC = () => {
   } = useBlocks();
 
   const location = useLocation();
+  const [isSaving, setIsSaving] = React.useState(false);
   const [isPublishing, setIsPublishing] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState<string>("");
+  const approvalFlowUrl = import.meta.env.VITE_APPROVAL_FLOW_URL || "";
 
   //
   // METADATA STATE (placeholder)
@@ -42,9 +44,20 @@ const EditorPage: React.FC = () => {
     setMetadata((prev) => ({ ...prev, ...updated }));
   };
 
+  const buildSerializableMetadata = (value: Metadata) => {
+    if (value.contentType === "page") {
+      const { category: _category, ...rest } = value;
+      return rest;
+    }
+    return value;
+  };
+
   const contentRootUrl =
     import.meta.env.VITE_AZURE_BLOB_CONTAINER_URL ||
-    "https://sa365evergreenwebsite.blob.core.windows.net/content";
+    "https://sa365evergreenwebsite.blob.core.windows.net/contentdrafts";
+  const normalizedContentRootUrl = contentRootUrl
+    .replace(/\/$/, "")
+    .replace(/\/(pages|posts)$/i, "");
 
   const normalizeMetadata = (
     loadedMetadata: any,
@@ -54,8 +67,8 @@ const EditorPage: React.FC = () => {
       typeof loadedMetadata.featuredImage === "string"
         ? loadedMetadata.featuredImage
         : typeof loadedMetadata.thumbnail === "string"
-        ? loadedMetadata.thumbnail
-        : loadedMetadata.featuredImage?.url || "";
+          ? loadedMetadata.thumbnail
+          : loadedMetadata.featuredImage?.url || "";
 
     return {
       id:
@@ -68,20 +81,22 @@ const EditorPage: React.FC = () => {
       title: loadedMetadata.title ?? "",
       slug: loadedMetadata.slug ?? loadedMetadata.path ?? "",
       category:
-        loadedMetadata.category ||
-        loadedMetadata.tags?.[0] ||
-        loadedMetadata.categories?.[0] ||
-        "",
+        contentType === "post"
+          ? loadedMetadata.category ||
+            loadedMetadata.tags?.[0] ||
+            loadedMetadata.categories?.[0] ||
+            ""
+          : "",
       featuredImage,
       status: loadedMetadata.status ?? loadedMetadata.state ?? "draft",
       contentType
     };
   };
 
-  const loadItemById = async (id: string) => {
+  const loadItemById = async (id: string, requestedType?: Metadata["contentType"]) => {
     try {
       setErrorMessage("");
-      console.debug("loadItemById", { id, contentRootUrl });
+      console.debug("loadItemById", { id, contentRootUrl: normalizedContentRootUrl, requestedType });
 
       const tryFetch = async (path: string) => {
         console.debug("trying content fetch", path);
@@ -89,17 +104,40 @@ const EditorPage: React.FC = () => {
         return res.ok ? res : null;
       };
 
-      const pagePath = `${contentRootUrl}/pages/${id}/post.json`;
-      const postPath = `${contentRootUrl}/posts/${id}/post.json`;
+      const postPostPath = `${normalizedContentRootUrl}/posts/${id}/post.json`;
+      const pagePagePath = `${normalizedContentRootUrl}/pages/${id}/page.json`;
+      const pagePostPath = `${normalizedContentRootUrl}/pages/${id}/post.json`;
 
-      let response = await tryFetch(postPath);
-      let contentType: Metadata["contentType"] = "post";
-      let attemptedPaths = [postPath];
+      const candidates =
+        requestedType === "page"
+          ? [
+              { path: pagePagePath, contentType: "page" as const },
+              { path: pagePostPath, contentType: "page" as const },
+              { path: postPostPath, contentType: "post" as const }
+            ]
+          : requestedType === "post"
+            ? [
+                { path: postPostPath, contentType: "post" as const },
+                { path: pagePagePath, contentType: "page" as const },
+                { path: pagePostPath, contentType: "page" as const }
+              ]
+            : [
+                { path: postPostPath, contentType: "post" as const },
+                { path: pagePagePath, contentType: "page" as const },
+                { path: pagePostPath, contentType: "page" as const }
+              ];
 
-      if (!response) {
-        response = await tryFetch(pagePath);
-        attemptedPaths.push(pagePath);
-        if (response) contentType = "page";
+      let response: Response | null = null;
+      let contentType: Metadata["contentType"] = requestedType ?? "post";
+      const attemptedPaths: string[] = [];
+
+      for (const candidate of candidates) {
+        attemptedPaths.push(candidate.path);
+        response = await tryFetch(candidate.path);
+        if (response) {
+          contentType = candidate.contentType;
+          break;
+        }
       }
 
       if (!response) {
@@ -110,9 +148,17 @@ const EditorPage: React.FC = () => {
         return;
       }
 
-      const data = await response.json();
-      const loadedMetadata = data.metadata ?? data;
+      const text = await response.text();
+      let data: any;
+      try {
+        data = JSON.parse(text);
+      } catch (parseError) {
+        console.error("Failed to parse JSON content", { path: response.url, text, parseError });
+        setErrorMessage("Unable to parse content JSON. Check the console for details.");
+        return;
+      }
 
+      const loadedMetadata = data.metadata ?? data;
       setMetadata(normalizeMetadata(loadedMetadata, contentType));
       setBlocks(data.blocks ?? []);
       console.debug("loaded content", { id, contentType, loadedMetadata });
@@ -124,16 +170,23 @@ const EditorPage: React.FC = () => {
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
+    const pageId = params.get("pageid");
+    const postId = params.get("postid");
     const id =
       params.get("id") ||
-      params.get("postid") ||
-      params.get("pageid") ||
+      postId ||
+      pageId ||
       params.get("guid");
+    const requestedType: Metadata["contentType"] | undefined = pageId
+      ? "page"
+      : postId
+        ? "post"
+        : undefined;
 
-    console.debug("EditorPage mounted", { search: location.search, id });
+    console.debug("EditorPage mounted", { search: location.search, id, requestedType });
 
     if (id) {
-      loadItemById(id);
+      loadItemById(id, requestedType);
     } else {
       setErrorMessage(
         "No post or page ID was provided. Open the app from the selected item in SharePoint."
@@ -141,10 +194,10 @@ const EditorPage: React.FC = () => {
     }
   }, [location.search]);
 
-// DOWNLOAD JSON  
+  // DOWNLOAD JSON  
 
   const downloadJSON = () => {
-    const payload = { metadata, blocks };
+    const payload = { metadata: buildSerializableMetadata(metadata), blocks };
     const blob = new Blob([JSON.stringify(payload, null, 2)], {
       type: "application/json"
     });
@@ -157,29 +210,106 @@ const EditorPage: React.FC = () => {
     URL.revokeObjectURL(url);
   };
 
-// PUBLISH TO BLOB STORAGE  
+  const getFlowUrl = (): string => {
+    const trimmed = approvalFlowUrl.trim();
+    const httpsIndex = trimmed.indexOf("https://");
+    const normalized = httpsIndex >= 0 ? trimmed.slice(httpsIndex) : trimmed;
+    return normalized;
+  };
 
-  const handlePublish = async () => {
+  const triggerApprovalFlow = async (
+    action: "save_draft" | "submit_for_approval",
+    blobUrl: string
+  ) => {
+    const flowUrl = getFlowUrl();
+    if (!flowUrl) {
+      throw new Error("Missing VITE_APPROVAL_FLOW_URL environment variable.");
+    }
+
+    const response = await fetch(flowUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        action,
+        itemId: metadata.id || metadata.slug,
+        contentType: metadata.contentType,
+        blobUrl,
+        metadata: buildSerializableMetadata(metadata),
+        blocks,
+        content: {
+          metadata: buildSerializableMetadata(metadata),
+          blocks
+        },
+        submittedAt: new Date().toISOString()
+      })
+    });
+
+    if (!response.ok) {
+      const details = await response.text();
+      throw new Error(`Flow trigger failed (${response.status}): ${details}`);
+    }
+  };
+
+  const validateSubmitForApproval = (): string[] => {
+    const issues: string[] = [];
+    if (!metadata.id?.trim()) issues.push("ID");
+    if (!metadata.title?.trim()) issues.push("Title");
+    if (!metadata.slug?.trim()) issues.push("Slug");
+    if (metadata.contentType === "post" && !metadata.category?.trim()) issues.push("Category");
+    if (!metadata.featuredImage?.trim()) issues.push("Featured Image");
+    if (!blocks.length) issues.push("At least one content block");
+    return issues;
+  };
+
+  const persistDraftAndTriggerFlow = async (
+    action: "save_draft" | "submit_for_approval"
+  ) => {
     const post = {
-      metadata,
+      metadata: buildSerializableMetadata(metadata),
       blocks
     };
 
     try {
-      setIsPublishing(true);
+      if (action === "save_draft") {
+        setIsSaving(true);
+      } else {
+        const issues = validateSubmitForApproval();
+        if (issues.length) {
+          alert(`Submit for approval blocked. Missing:\n- ${issues.join("\n- ")}`);
+          return;
+        }
+        setIsPublishing(true);
+      }
 
       const blobName =
         metadata.id || metadata.slug || `post-${Date.now()}`;
-      const url = await publishToBlob(post, blobName);
+      const blobUrl = await publishToBlob(post, blobName);
+      await triggerApprovalFlow(action, blobUrl);
 
-      console.log("Published to:", url);
-      alert(`Published successfully:\n${url}`);
+      const successMessage =
+        action === "save_draft"
+          ? `Draft saved and workflow notified:\n${blobUrl}`
+          : `Submitted for approval. Workflow notified:\n${blobUrl}`;
+      alert(successMessage);
     } catch (err) {
       console.error(err);
-      alert("Failed to publish. Check console for details.");
+      alert("Failed to save and notify workflow. Check console for details.");
     } finally {
+      setIsSaving(false);
       setIsPublishing(false);
     }
+  };
+
+  // SAVE DRAFT TO BLOB STORAGE + FLOW TRIGGER
+  const handleSaveDraft = async () => {
+    await persistDraftAndTriggerFlow("save_draft");
+  };
+
+  // SUBMIT FOR APPROVAL TO FLOW
+  const handlePublish = async () => {
+    await persistDraftAndTriggerFlow("submit_for_approval");
   };
 
   return (
@@ -194,11 +324,18 @@ const EditorPage: React.FC = () => {
             Export JSON
           </button>
           <button
+            onClick={handleSaveDraft}
+            disabled={isSaving || isPublishing}
+            className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+          >
+            {isSaving ? "Saving..." : "Save draft"}
+          </button>
+          <button
             onClick={handlePublish}
             disabled={isPublishing}
             className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
           >
-            {isPublishing ? "Publishing..." : "Publish"}
+            {isPublishing ? "Sending..." : "Send for approval"}
           </button>
         </div>
       }
@@ -237,4 +374,3 @@ const EditorPage: React.FC = () => {
 };
 
 export default EditorPage;
-

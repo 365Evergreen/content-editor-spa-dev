@@ -1,27 +1,75 @@
-// uploadBlob.ts
+const normalizeSasToken = (rawSasToken?: string): string => {
+  if (!rawSasToken) return "";
+  return rawSasToken
+    .trim()
+    .replace(/^['"]|['"]$/g, "")
+    .replace(/^(VITE_AZURE_BLOB_SAS_TOKEN|VITE_SAS)\s*=\s*/i, "")
+    .replace(/^\?/, "");
+};
+
+const formatBlobError = (status: number, details: string, targetUrl: string): string => {
+  if (status === 403 && /AuthenticationFailed|Signature did not match/i.test(details)) {
+    return [
+      "Upload failed (403): SAS token signature mismatch.",
+      `Target URL: ${targetUrl}`,
+      "Generate a new SAS token for the contentdrafts container and update VITE_AZURE_BLOB_SAS_TOKEN."
+    ].join(" ");
+  }
+
+  return `Upload failed (${status}): ${details}`;
+};
+
+const resolveEditorContext = (): { id: string; contentType: "pages" | "posts" } => {
+  const params = new URLSearchParams(window.location.search);
+  const pageId = params.get("pageid");
+  const postId = params.get("postid");
+  const genericId = params.get("id") || params.get("guid");
+  const id = pageId || postId || genericId;
+
+  if (!id) {
+    throw new Error("Missing page/post ID in URL. Open the editor from SharePoint.");
+  }
+
+  return {
+    id,
+    contentType: pageId ? "pages" : "posts"
+  };
+};
+
 export const uploadToBlob = async (file: File): Promise<string> => {
-  const containerUrl =
+  const configuredContainer = (
     import.meta.env.VITE_AZURE_BLOB_CONTAINER_URL ||
-    "https://sa365evergreenwebsite.blob.core.windows.net/content/posts";
-  const rawSasToken =
-    import.meta.env.VITE_AZURE_BLOB_SAS_TOKEN ||
-    "VITE_AZURE_BLOB_SAS_TOKEN=?sv=2025-07-05&spr=https&st=2026-07-16T06%3A42%3A59Z&se=2027-07-16T06%3A42%3A00Z&sr=c&sp=racwltf&sig=UvSanJ9FTP5KJF1XvKA50suaHNvZcKn9dy8oBMC46Ak%3D";
-  const sasToken = rawSasToken.replace(/^\?/, "");
+    "https://sa365evergreenwebsite.blob.core.windows.net/contentdrafts"
+  ).replace(/\/$/, "");
+  const rootContainerUrl = configuredContainer.replace(/\/(pages|posts)$/i, "");
+  const { id, contentType } = resolveEditorContext();
+
+  const sasToken = normalizeSasToken(
+    import.meta.env.VITE_AZURE_BLOB_SAS_TOKEN || import.meta.env.VITE_SAS
+  );
+
+  if (!sasToken || !sasToken.includes("sig=")) {
+    throw new Error("Missing or invalid SAS token. Check VITE_AZURE_BLOB_SAS_TOKEN.");
+  }
+
   const blobName = `${Date.now()}-${file.name}`;
+  const encodedBlobName = encodeURIComponent(blobName);
+  const blobUrl = `${rootContainerUrl}/${contentType}/${encodeURIComponent(id)}/${encodedBlobName}`;
 
-  const url = `${containerUrl}/${blobName}?${sasToken}`;
-
-  const response = await fetch(url, {
+  const response = await fetch(`${blobUrl}?${sasToken}`, {
     method: "PUT",
     headers: {
-      "x-ms-blob-type": "BlockBlob"
+      "x-ms-blob-type": "BlockBlob",
+      "x-ms-version": "2023-11-03",
+      "Content-Type": file.type || "application/octet-stream"
     },
     body: file
   });
 
   if (!response.ok) {
-    throw new Error(`Upload failed with status ${response.status}`);
+    const details = await response.text();
+    throw new Error(formatBlobError(response.status, details, blobUrl));
   }
 
-  return `${containerUrl}/${blobName}`;
+  return blobUrl;
 };

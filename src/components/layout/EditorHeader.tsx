@@ -16,7 +16,7 @@ const EditorHeader: React.FC<EditorHeaderProps> = ({
     <header className="w-full bg-white border-b px-6 py-4 flex items-center justify-between">
       <div className="flex items-center gap-4">
         <button
-          className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent"
+          className="bg-green-500 hover:bg-gray-100 text-gray-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent"
           onClick={onToggleLeft}
         >
           Toggle Left

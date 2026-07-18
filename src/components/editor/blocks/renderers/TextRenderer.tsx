@@ -5,6 +5,7 @@ import ParagraphBlock from "../types/text/ParagraphBlock";
 import HeadingBlock from "../types/text/HeadingBlock";
 import ListBlock from "../types/text/ListBlock";
 import CodeBlock from "../types/text/CodeBlock";
+import TableBlock from "../types/text/TableBlock";
 
 export interface TextRendererProps {
   block: any;
@@ -52,10 +53,12 @@ const TextRenderer: React.FC<TextRendererProps> = ({ block, onUpdate, onFocus })
 
     case "table":
       return (
-        <div className="text-gray-500 italic">
-          Table block rendering is not implemented yet.
-        </div>
-      );  
+        <TableBlock
+          block={block}
+          onUpdate={onUpdate}
+          onFocus={onFocus}
+        />
+      );
 
     default:
       return (

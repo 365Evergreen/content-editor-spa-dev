@@ -1,0 +1,54 @@
+{
+  "metadata": {
+    "id": "00007",
+    "title": "Title",
+    "slug": "slug",
+    "category": "Copilot",
+    "featuredImage": "/thumbnail.webp",
+    "status": "draft",
+    "contentType": "post"
+  },
+  "blocks": [
+    {
+      "id": "4f2de645-9ff8-4c0e-af25-a0fa2d02995e",
+      "type": "heading",
+      "level": 2,
+      "text": "Cunty bollocks"
+    },
+    {
+      "id": "2aebdf77-1136-455e-a37a-840e1021b50e",
+      "type": "image",
+      "src": "",
+      "alt": "",
+      "url": "https://cdn.365evergreen.com/content/posts/00007/1784294974398-1200x675.jpg"
+    },
+    {
+      "id": "e59b2534-09a8-4f3e-b8be-5e1a610a51d0",
+      "type": "paragraph",
+      "text": "<p class=\"text-sm text-gray-700 mb-4\" style=\"font-size: 15.75px; line-height: 1.42857; color: oklch(0.373 0.034 259.733); letter-spacing: 0.18px; text-align: center;\">No post or page ID was provided. Open the app from the selected item in SharePoint.</p><p class=\"text-sm text-gray-500\" style=\"font-size: 15.75px; line-height: 1.42857; color: oklch(0.551 0.027 264.364); letter-spacing: 0.18px; text-align: center;\">Please open the app from the selected post or page in the SharePoint list.</p>",
+      "align": "left"
+    },
+    {
+      "id": "526b901f-3234-4977-9057-3f119d794937",
+      "type": "list",
+      "items": [
+        "cunt",
+        "bollocks"
+      ]
+    },
+    {
+      "id": "885fd7b2-e687-4cb2-8e40-a06afb7baee6",
+      "type": "accordion",
+      "items": [
+        {
+          "title": "Cunt",
+          "content": "Bollocks"
+        },
+        {
+          "title": "Fanny",
+          "content": "smell "
+        }
+      ]
+    }
+  ]
+}
