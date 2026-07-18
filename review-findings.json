@@ -1,0 +1,1064 @@
+{
+  "generated_at": "2026-07-18T13:13:59+00:00",
+  "root": "C:\\Users\\Pauli\\repos\\SPA-sites\\content-editor-spa\\src",
+  "tool": "review.py",
+  "tool_version": "1.0",
+  "totals": {
+    "files_scanned": 46,
+    "files_with_findings": 31,
+    "files_clean": 15,
+    "files_skipped": 0,
+    "errors": 35,
+    "non-compliance": 35,
+    "improvements": 15
+  },
+  "files": [
+    {
+      "title": "Code review: App.css",
+      "relative_path": "App.css",
+      "severity": "non-compliance",
+      "summary": {
+        "error": 0,
+        "non-compliance": 2,
+        "improvement": 0
+      },
+      "findings": [
+        {
+          "line": 40,
+          "severity": "non-compliance",
+          "rule": "css-duplicate-selector",
+          "message": "Duplicate selector '.framework' (also at line 35)."
+        },
+        {
+          "line": 147,
+          "severity": "non-compliance",
+          "rule": "css-duplicate-selector",
+          "message": "Duplicate selector 'a' (also at line 117)."
+        }
+      ]
+    },
+    {
+      "title": "Code review: App.tsx",
+      "relative_path": "App.tsx",
+      "severity": "clean",
+      "summary": {
+        "error": 0,
+        "non-compliance": 0,
+        "improvement": 0
+      },
+      "findings": []
+    },
+    {
+      "title": "Code review: index.css",
+      "relative_path": "index.css",
+      "severity": "non-compliance",
+      "summary": {
+        "error": 0,
+        "non-compliance": 2,
+        "improvement": 0
+      },
+      "findings": [
+        {
+          "line": 76,
+          "severity": "non-compliance",
+          "rule": "css-duplicate-selector",
+          "message": "Duplicate selector 'h1' (also at line 69)."
+        },
+        {
+          "line": 106,
+          "severity": "non-compliance",
+          "rule": "css-duplicate-selector",
+          "message": "Duplicate selector 'code' (also at line 98)."
+        }
+      ]
+    },
+    {
+      "title": "Code review: main.tsx",
+      "relative_path": "main.tsx",
+      "severity": "clean",
+      "summary": {
+        "error": 0,
+        "non-compliance": 0,
+        "improvement": 0
+      },
+      "findings": []
+    },
+    {
+      "title": "Code review: components/editor/BlockPalette.tsx",
+      "relative_path": "components/editor/BlockPalette.tsx",
+      "severity": "non-compliance",
+      "summary": {
+        "error": 0,
+        "non-compliance": 1,
+        "improvement": 0
+      },
+      "findings": [
+        {
+          "line": 73,
+          "severity": "non-compliance",
+          "rule": "react-missing-key",
+          "message": ".map() callback appears to be missing a `key` prop on the root element."
+        }
+      ]
+    },
+    {
+      "title": "Code review: components/editor/blocks/BlockToolbar.tsx",
+      "relative_path": "components/editor/blocks/BlockToolbar.tsx",
+      "severity": "error",
+      "summary": {
+        "error": 3,
+        "non-compliance": 0,
+        "improvement": 0
+      },
+      "findings": [
+        {
+          "line": 16,
+          "severity": "error",
+          "rule": "a11y-button-name",
+          "message": "<button> has no accessible name (no aria-label, no text content)."
+        },
+        {
+          "line": 23,
+          "severity": "error",
+          "rule": "a11y-button-name",
+          "message": "<button> has no accessible name (no aria-label, no text content)."
+        },
+        {
+          "line": 30,
+          "severity": "error",
+          "rule": "a11y-button-name",
+          "message": "<button> has no accessible name (no aria-label, no text content)."
+        }
+      ]
+    },
+    {
+      "title": "Code review: components/editor/blocks/renderers/BlockRenderer.tsx",
+      "relative_path": "components/editor/blocks/renderers/BlockRenderer.tsx",
+      "severity": "non-compliance",
+      "summary": {
+        "error": 0,
+        "non-compliance": 2,
+        "improvement": 0
+      },
+      "findings": [
+        {
+          "line": 10,
+          "severity": "non-compliance",
+          "rule": "ts-any",
+          "message": "Avoid `any` — use a precise type or `unknown`."
+        },
+        {
+          "line": 11,
+          "severity": "non-compliance",
+          "rule": "ts-any",
+          "message": "Avoid `any` — use a precise type or `unknown`."
+        }
+      ]
+    },
+    {
+      "title": "Code review: components/editor/blocks/renderers/DesignRenderer.tsx",
+      "relative_path": "components/editor/blocks/renderers/DesignRenderer.tsx",
+      "severity": "non-compliance",
+      "summary": {
+        "error": 0,
+        "non-compliance": 2,
+        "improvement": 0
+      },
+      "findings": [
+        {
+          "line": 12,
+          "severity": "non-compliance",
+          "rule": "ts-any",
+          "message": "Avoid `any` — use a precise type or `unknown`."
+        },
+        {
+          "line": 13,
+          "severity": "non-compliance",
+          "rule": "ts-any",
+          "message": "Avoid `any` — use a precise type or `unknown`."
+        }
+      ]
+    },
+    {
+      "title": "Code review: components/editor/blocks/renderers/MediaRenderer.tsx",
+      "relative_path": "components/editor/blocks/renderers/MediaRenderer.tsx",
+      "severity": "non-compliance",
+      "summary": {
+        "error": 0,
+        "non-compliance": 2,
+        "improvement": 0
+      },
+      "findings": [
+        {
+          "line": 11,
+          "severity": "non-compliance",
+          "rule": "ts-any",
+          "message": "Avoid `any` — use a precise type or `unknown`."
+        },
+        {
+          "line": 12,
+          "severity": "non-compliance",
+          "rule": "ts-any",
+          "message": "Avoid `any` — use a precise type or `unknown`."
+        }
+      ]
+    },
+    {
+      "title": "Code review: components/editor/blocks/renderers/TextRenderer.tsx",
+      "relative_path": "components/editor/blocks/renderers/TextRenderer.tsx",
+      "severity": "non-compliance",
+      "summary": {
+        "error": 0,
+        "non-compliance": 2,
+        "improvement": 0
+      },
+      "findings": [
+        {
+          "line": 11,
+          "severity": "non-compliance",
+          "rule": "ts-any",
+          "message": "Avoid `any` — use a precise type or `unknown`."
+        },
+        {
+          "line": 12,
+          "severity": "non-compliance",
+          "rule": "ts-any",
+          "message": "Avoid `any` — use a precise type or `unknown`."
+        }
+      ]
+    },
+    {
+      "title": "Code review: components/editor/blocks/types/design/ButtonBlock.tsx",
+      "relative_path": "components/editor/blocks/types/design/ButtonBlock.tsx",
+      "severity": "error",
+      "summary": {
+        "error": 1,
+        "non-compliance": 2,
+        "improvement": 0
+      },
+      "findings": [
+        {
+          "line": 41,
+          "severity": "non-compliance",
+          "rule": "react-missing-key",
+          "message": ".map() callback appears to be missing a `key` prop on the root element."
+        },
+        {
+          "line": 418,
+          "severity": "error",
+          "rule": "a11y-button-name",
+          "message": "<button> has no accessible name (no aria-label, no text content)."
+        },
+        {
+          "line": 191,
+          "severity": "non-compliance",
+          "rule": "a11y-anchor-href",
+          "message": "<a> missing href — use a <button> if not navigating."
+        }
+      ]
+    },
+    {
+      "title": "Code review: components/editor/blocks/types/design/ColumnsBlock.tsx",
+      "relative_path": "components/editor/blocks/types/design/ColumnsBlock.tsx",
+      "severity": "error",
+      "summary": {
+        "error": 1,
+        "non-compliance": 0,
+        "improvement": 0
+      },
+      "findings": [
+        {
+          "line": 51,
+          "severity": "error",
+          "rule": "a11y-button-name",
+          "message": "<button> has no accessible name (no aria-label, no text content)."
+        }
+      ]
+    },
+    {
+      "title": "Code review: components/editor/blocks/types/design/GridBlock.tsx",
+      "relative_path": "components/editor/blocks/types/design/GridBlock.tsx",
+      "severity": "error",
+      "summary": {
+        "error": 2,
+        "non-compliance": 3,
+        "improvement": 0
+      },
+      "findings": [
+        {
+          "line": 17,
+          "severity": "non-compliance",
+          "rule": "react-missing-key",
+          "message": ".map() callback appears to be missing a `key` prop on the root element."
+        },
+        {
+          "line": 18,
+          "severity": "non-compliance",
+          "rule": "react-missing-key",
+          "message": ".map() callback appears to be missing a `key` prop on the root element."
+        },
+        {
+          "line": 29,
+          "severity": "non-compliance",
+          "rule": "react-missing-key",
+          "message": ".map() callback appears to be missing a `key` prop on the root element."
+        },
+        {
+          "line": 57,
+          "severity": "error",
+          "rule": "a11y-button-name",
+          "message": "<button> has no accessible name (no aria-label, no text content)."
+        },
+        {
+          "line": 64,
+          "severity": "error",
+          "rule": "a11y-button-name",
+          "message": "<button> has no accessible name (no aria-label, no text content)."
+        }
+      ]
+    },
+    {
+      "title": "Code review: components/editor/blocks/types/design/GroupBlock.tsx",
+      "relative_path": "components/editor/blocks/types/design/GroupBlock.tsx",
+      "severity": "error",
+      "summary": {
+        "error": 1,
+        "non-compliance": 0,
+        "improvement": 0
+      },
+      "findings": [
+        {
+          "line": 49,
+          "severity": "error",
+          "rule": "a11y-button-name",
+          "message": "<button> has no accessible name (no aria-label, no text content)."
+        }
+      ]
+    },
+    {
+      "title": "Code review: components/editor/blocks/types/design/RowBlock.tsx",
+      "relative_path": "components/editor/blocks/types/design/RowBlock.tsx",
+      "severity": "error",
+      "summary": {
+        "error": 1,
+        "non-compliance": 0,
+        "improvement": 0
+      },
+      "findings": [
+        {
+          "line": 51,
+          "severity": "error",
+          "rule": "a11y-button-name",
+          "message": "<button> has no accessible name (no aria-label, no text content)."
+        }
+      ]
+    },
+    {
+      "title": "Code review: components/editor/blocks/types/design/StackBlock.tsx",
+      "relative_path": "components/editor/blocks/types/design/StackBlock.tsx",
+      "severity": "error",
+      "summary": {
+        "error": 1,
+        "non-compliance": 0,
+        "improvement": 0
+      },
+      "findings": [
+        {
+          "line": 49,
+          "severity": "error",
+          "rule": "a11y-button-name",
+          "message": "<button> has no accessible name (no aria-label, no text content)."
+        }
+      ]
+    },
+    {
+      "title": "Code review: components/editor/blocks/types/design/AccordonBlock/AccordionBlock.module.css",
+      "relative_path": "components/editor/blocks/types/design/AccordonBlock/AccordionBlock.module.css",
+      "severity": "clean",
+      "summary": {
+        "error": 0,
+        "non-compliance": 0,
+        "improvement": 0
+      },
+      "findings": []
+    },
+    {
+      "title": "Code review: components/editor/blocks/types/design/AccordonBlock/AccordionBlock.tsx",
+      "relative_path": "components/editor/blocks/types/design/AccordonBlock/AccordionBlock.tsx",
+      "severity": "error",
+      "summary": {
+        "error": 1,
+        "non-compliance": 3,
+        "improvement": 0
+      },
+      "findings": [
+        {
+          "line": 31,
+          "severity": "non-compliance",
+          "rule": "react-missing-key",
+          "message": ".map() callback appears to be missing a `key` prop on the root element."
+        },
+        {
+          "line": 36,
+          "severity": "non-compliance",
+          "rule": "react-missing-key",
+          "message": ".map() callback appears to be missing a `key` prop on the root element."
+        },
+        {
+          "line": 64,
+          "severity": "non-compliance",
+          "rule": "react-missing-key",
+          "message": ".map() callback appears to be missing a `key` prop on the root element."
+        },
+        {
+          "line": 239,
+          "severity": "error",
+          "rule": "a11y-button-name",
+          "message": "<button> has no accessible name (no aria-label, no text content)."
+        }
+      ]
+    },
+    {
+      "title": "Code review: components/editor/blocks/types/media/AudioBlock.tsx",
+      "relative_path": "components/editor/blocks/types/media/AudioBlock.tsx",
+      "severity": "clean",
+      "summary": {
+        "error": 0,
+        "non-compliance": 0,
+        "improvement": 0
+      },
+      "findings": []
+    },
+    {
+      "title": "Code review: components/editor/blocks/types/media/CoverBlock.tsx",
+      "relative_path": "components/editor/blocks/types/media/CoverBlock.tsx",
+      "severity": "error",
+      "summary": {
+        "error": 1,
+        "non-compliance": 0,
+        "improvement": 0
+      },
+      "findings": [
+        {
+          "line": 77,
+          "severity": "error",
+          "rule": "a11y-img-alt",
+          "message": "<img> is missing an `alt` attribute."
+        }
+      ]
+    },
+    {
+      "title": "Code review: components/editor/blocks/types/media/FileBlock.tsx",
+      "relative_path": "components/editor/blocks/types/media/FileBlock.tsx",
+      "severity": "clean",
+      "summary": {
+        "error": 0,
+        "non-compliance": 0,
+        "improvement": 0
+      },
+      "findings": []
+    },
+    {
+      "title": "Code review: components/editor/blocks/types/media/GalleryBlock.tsx",
+      "relative_path": "components/editor/blocks/types/media/GalleryBlock.tsx",
+      "severity": "error",
+      "summary": {
+        "error": 1,
+        "non-compliance": 0,
+        "improvement": 0
+      },
+      "findings": [
+        {
+          "line": 75,
+          "severity": "error",
+          "rule": "a11y-img-alt",
+          "message": "<img> is missing an `alt` attribute."
+        }
+      ]
+    },
+    {
+      "title": "Code review: components/editor/blocks/types/media/ImageBlock.tsx",
+      "relative_path": "components/editor/blocks/types/media/ImageBlock.tsx",
+      "severity": "error",
+      "summary": {
+        "error": 1,
+        "non-compliance": 0,
+        "improvement": 0
+      },
+      "findings": [
+        {
+          "line": 82,
+          "severity": "error",
+          "rule": "a11y-button-name",
+          "message": "<button> has no accessible name (no aria-label, no text content)."
+        }
+      ]
+    },
+    {
+      "title": "Code review: components/editor/blocks/types/media/MediaPicker.tsx",
+      "relative_path": "components/editor/blocks/types/media/MediaPicker.tsx",
+      "severity": "error",
+      "summary": {
+        "error": 2,
+        "non-compliance": 0,
+        "improvement": 0
+      },
+      "findings": [
+        {
+          "line": 86,
+          "severity": "error",
+          "rule": "a11y-img-alt",
+          "message": "<img> is missing an `alt` attribute."
+        },
+        {
+          "line": 52,
+          "severity": "error",
+          "rule": "a11y-button-name",
+          "message": "<button> has no accessible name (no aria-label, no text content)."
+        }
+      ]
+    },
+    {
+      "title": "Code review: components/editor/blocks/types/media/VideoBlock.tsx",
+      "relative_path": "components/editor/blocks/types/media/VideoBlock.tsx",
+      "severity": "clean",
+      "summary": {
+        "error": 0,
+        "non-compliance": 0,
+        "improvement": 0
+      },
+      "findings": []
+    },
+    {
+      "title": "Code review: components/editor/blocks/types/text/CodeBlock.tsx",
+      "relative_path": "components/editor/blocks/types/text/CodeBlock.tsx",
+      "severity": "error",
+      "summary": {
+        "error": 3,
+        "non-compliance": 1,
+        "improvement": 1
+      },
+      "findings": [
+        {
+          "line": 39,
+          "severity": "non-compliance",
+          "rule": "react-missing-key",
+          "message": ".map() callback appears to be missing a `key` prop on the root element."
+        },
+        {
+          "line": 64,
+          "severity": "improvement",
+          "rule": "long-line",
+          "message": "Line is 133 chars (>120). Consider wrapping."
+        },
+        {
+          "line": 64,
+          "severity": "error",
+          "rule": "a11y-button-name",
+          "message": "<button> has no accessible name (no aria-label, no text content)."
+        },
+        {
+          "line": 67,
+          "severity": "error",
+          "rule": "a11y-button-name",
+          "message": "<button> has no accessible name (no aria-label, no text content)."
+        },
+        {
+          "line": 70,
+          "severity": "error",
+          "rule": "a11y-button-name",
+          "message": "<button> has no accessible name (no aria-label, no text content)."
+        }
+      ]
+    },
+    {
+      "title": "Code review: components/editor/blocks/types/text/HeadingBlock.tsx",
+      "relative_path": "components/editor/blocks/types/text/HeadingBlock.tsx",
+      "severity": "improvement",
+      "summary": {
+        "error": 0,
+        "non-compliance": 0,
+        "improvement": 4
+      },
+      "findings": [
+        {
+          "line": 57,
+          "severity": "improvement",
+          "rule": "long-line",
+          "message": "Line is 124 chars (>120). Consider wrapping."
+        },
+        {
+          "line": 60,
+          "severity": "improvement",
+          "rule": "long-line",
+          "message": "Line is 128 chars (>120). Consider wrapping."
+        },
+        {
+          "line": 63,
+          "severity": "improvement",
+          "rule": "long-line",
+          "message": "Line is 126 chars (>120). Consider wrapping."
+        },
+        {
+          "line": 82,
+          "severity": "improvement",
+          "rule": "long-line",
+          "message": "Line is 168 chars (>120). Consider wrapping."
+        }
+      ]
+    },
+    {
+      "title": "Code review: components/editor/blocks/types/text/ListBlock.tsx",
+      "relative_path": "components/editor/blocks/types/text/ListBlock.tsx",
+      "severity": "error",
+      "summary": {
+        "error": 3,
+        "non-compliance": 0,
+        "improvement": 3
+      },
+      "findings": [
+        {
+          "line": 63,
+          "severity": "improvement",
+          "rule": "long-line",
+          "message": "Line is 128 chars (>120). Consider wrapping."
+        },
+        {
+          "line": 66,
+          "severity": "improvement",
+          "rule": "long-line",
+          "message": "Line is 127 chars (>120). Consider wrapping."
+        },
+        {
+          "line": 73,
+          "severity": "improvement",
+          "rule": "long-line",
+          "message": "Line is 127 chars (>120). Consider wrapping."
+        },
+        {
+          "line": 70,
+          "severity": "error",
+          "rule": "a11y-button-name",
+          "message": "<button> has no accessible name (no aria-label, no text content)."
+        },
+        {
+          "line": 73,
+          "severity": "error",
+          "rule": "a11y-button-name",
+          "message": "<button> has no accessible name (no aria-label, no text content)."
+        },
+        {
+          "line": 101,
+          "severity": "error",
+          "rule": "a11y-button-name",
+          "message": "<button> has no accessible name (no aria-label, no text content)."
+        }
+      ]
+    },
+    {
+      "title": "Code review: components/editor/blocks/types/text/ParagraphBlock.tsx",
+      "relative_path": "components/editor/blocks/types/text/ParagraphBlock.tsx",
+      "severity": "error",
+      "summary": {
+        "error": 4,
+        "non-compliance": 0,
+        "improvement": 0
+      },
+      "findings": [
+        {
+          "line": 166,
+          "severity": "error",
+          "rule": "a11y-button-name",
+          "message": "<button> has no accessible name (no aria-label, no text content)."
+        },
+        {
+          "line": 173,
+          "severity": "error",
+          "rule": "a11y-button-name",
+          "message": "<button> has no accessible name (no aria-label, no text content)."
+        },
+        {
+          "line": 180,
+          "severity": "error",
+          "rule": "a11y-button-name",
+          "message": "<button> has no accessible name (no aria-label, no text content)."
+        },
+        {
+          "line": 188,
+          "severity": "error",
+          "rule": "a11y-button-name",
+          "message": "<button> has no accessible name (no aria-label, no text content)."
+        }
+      ]
+    },
+    {
+      "title": "Code review: components/editor/blocks/types/text/TableBlock.tsx",
+      "relative_path": "components/editor/blocks/types/text/TableBlock.tsx",
+      "severity": "error",
+      "summary": {
+        "error": 6,
+        "non-compliance": 4,
+        "improvement": 0
+      },
+      "findings": [
+        {
+          "line": 20,
+          "severity": "non-compliance",
+          "rule": "react-missing-key",
+          "message": ".map() callback appears to be missing a `key` prop on the root element."
+        },
+        {
+          "line": 21,
+          "severity": "non-compliance",
+          "rule": "react-missing-key",
+          "message": ".map() callback appears to be missing a `key` prop on the root element."
+        },
+        {
+          "line": 32,
+          "severity": "non-compliance",
+          "rule": "react-missing-key",
+          "message": ".map() callback appears to be missing a `key` prop on the root element."
+        },
+        {
+          "line": 44,
+          "severity": "non-compliance",
+          "rule": "react-missing-key",
+          "message": ".map() callback appears to be missing a `key` prop on the root element."
+        },
+        {
+          "line": 68,
+          "severity": "error",
+          "rule": "a11y-button-name",
+          "message": "<button> has no accessible name (no aria-label, no text content)."
+        },
+        {
+          "line": 71,
+          "severity": "error",
+          "rule": "a11y-button-name",
+          "message": "<button> has no accessible name (no aria-label, no text content)."
+        },
+        {
+          "line": 75,
+          "severity": "error",
+          "rule": "a11y-button-name",
+          "message": "<button> has no accessible name (no aria-label, no text content)."
+        },
+        {
+          "line": 78,
+          "severity": "error",
+          "rule": "a11y-button-name",
+          "message": "<button> has no accessible name (no aria-label, no text content)."
+        },
+        {
+          "line": 106,
+          "severity": "error",
+          "rule": "a11y-button-name",
+          "message": "<button> has no accessible name (no aria-label, no text content)."
+        },
+        {
+          "line": 114,
+          "severity": "error",
+          "rule": "a11y-button-name",
+          "message": "<button> has no accessible name (no aria-label, no text content)."
+        }
+      ]
+    },
+    {
+      "title": "Code review: components/editor/EditorCanvas/EditorCanvas.tsx",
+      "relative_path": "components/editor/EditorCanvas/EditorCanvas.tsx",
+      "severity": "non-compliance",
+      "summary": {
+        "error": 0,
+        "non-compliance": 2,
+        "improvement": 0
+      },
+      "findings": [
+        {
+          "line": 6,
+          "severity": "non-compliance",
+          "rule": "ts-any",
+          "message": "Avoid `any` — use a precise type or `unknown`."
+        },
+        {
+          "line": 7,
+          "severity": "non-compliance",
+          "rule": "ts-any",
+          "message": "Avoid `any` — use a precise type or `unknown`."
+        }
+      ]
+    },
+    {
+      "title": "Code review: components/layout/EditorCanvas.tsx",
+      "relative_path": "components/layout/EditorCanvas.tsx",
+      "severity": "clean",
+      "summary": {
+        "error": 0,
+        "non-compliance": 0,
+        "improvement": 0
+      },
+      "findings": []
+    },
+    {
+      "title": "Code review: components/layout/EditorHeader.tsx",
+      "relative_path": "components/layout/EditorHeader.tsx",
+      "severity": "improvement",
+      "summary": {
+        "error": 0,
+        "non-compliance": 0,
+        "improvement": 2
+      },
+      "findings": [
+        {
+          "line": 19,
+          "severity": "improvement",
+          "rule": "long-line",
+          "message": "Line is 155 chars (>120). Consider wrapping."
+        },
+        {
+          "line": 26,
+          "severity": "improvement",
+          "rule": "long-line",
+          "message": "Line is 157 chars (>120). Consider wrapping."
+        }
+      ]
+    },
+    {
+      "title": "Code review: components/layout/EditorLayout.tsx",
+      "relative_path": "components/layout/EditorLayout.tsx",
+      "severity": "clean",
+      "summary": {
+        "error": 0,
+        "non-compliance": 0,
+        "improvement": 0
+      },
+      "findings": []
+    },
+    {
+      "title": "Code review: components/layout/EditorSidebarLeft.tsx",
+      "relative_path": "components/layout/EditorSidebarLeft.tsx",
+      "severity": "clean",
+      "summary": {
+        "error": 0,
+        "non-compliance": 0,
+        "improvement": 0
+      },
+      "findings": []
+    },
+    {
+      "title": "Code review: components/layout/EditorSidebarRight.tsx",
+      "relative_path": "components/layout/EditorSidebarRight.tsx",
+      "severity": "clean",
+      "summary": {
+        "error": 0,
+        "non-compliance": 0,
+        "improvement": 0
+      },
+      "findings": []
+    },
+    {
+      "title": "Code review: components/metadata/MetadataPanel.tsx",
+      "relative_path": "components/metadata/MetadataPanel.tsx",
+      "severity": "error",
+      "summary": {
+        "error": 1,
+        "non-compliance": 3,
+        "improvement": 0
+      },
+      "findings": [
+        {
+          "line": 17,
+          "severity": "non-compliance",
+          "rule": "ts-any",
+          "message": "Avoid `any` — use a precise type or `unknown`."
+        },
+        {
+          "line": 25,
+          "severity": "non-compliance",
+          "rule": "ts-any",
+          "message": "Avoid `any` — use a precise type or `unknown`."
+        },
+        {
+          "line": 165,
+          "severity": "non-compliance",
+          "rule": "ts-any",
+          "message": "Avoid `any` — use a precise type or `unknown`."
+        },
+        {
+          "line": 106,
+          "severity": "error",
+          "rule": "a11y-img-alt",
+          "message": "<img> is missing an `alt` attribute."
+        }
+      ]
+    },
+    {
+      "title": "Code review: hooks/useBlocks.ts",
+      "relative_path": "hooks/useBlocks.ts",
+      "severity": "non-compliance",
+      "summary": {
+        "error": 0,
+        "non-compliance": 2,
+        "improvement": 0
+      },
+      "findings": [
+        {
+          "line": 6,
+          "severity": "non-compliance",
+          "rule": "ts-any",
+          "message": "Avoid `any` — use a precise type or `unknown`."
+        },
+        {
+          "line": 32,
+          "severity": "non-compliance",
+          "rule": "react-missing-key",
+          "message": ".map() callback appears to be missing a `key` prop on the root element."
+        }
+      ]
+    },
+    {
+      "title": "Code review: hooks/useCategories.ts",
+      "relative_path": "hooks/useCategories.ts",
+      "severity": "improvement",
+      "summary": {
+        "error": 0,
+        "non-compliance": 0,
+        "improvement": 1
+      },
+      "findings": [
+        {
+          "line": 37,
+          "severity": "improvement",
+          "rule": "long-line",
+          "message": "Line is 150 chars (>120). Consider wrapping."
+        }
+      ]
+    },
+    {
+      "title": "Code review: models/Metadata.ts",
+      "relative_path": "models/Metadata.ts",
+      "severity": "clean",
+      "summary": {
+        "error": 0,
+        "non-compliance": 0,
+        "improvement": 0
+      },
+      "findings": []
+    },
+    {
+      "title": "Code review: pages/EditorPage.tsx",
+      "relative_path": "pages/EditorPage.tsx",
+      "severity": "error",
+      "summary": {
+        "error": 2,
+        "non-compliance": 1,
+        "improvement": 4
+      },
+      "findings": [
+        {
+          "line": 139,
+          "severity": "improvement",
+          "rule": "console-left-in",
+          "message": "Remove debug console.log before shipping."
+        },
+        {
+          "line": 142,
+          "severity": "improvement",
+          "rule": "console-left-in",
+          "message": "Remove debug console.log before shipping."
+        },
+        {
+          "line": 203,
+          "severity": "improvement",
+          "rule": "console-left-in",
+          "message": "Remove debug console.log before shipping."
+        },
+        {
+          "line": 225,
+          "severity": "improvement",
+          "rule": "console-left-in",
+          "message": "Remove debug console.log before shipping."
+        },
+        {
+          "line": 103,
+          "severity": "non-compliance",
+          "rule": "ts-any",
+          "message": "Avoid `any` — use a precise type or `unknown`."
+        },
+        {
+          "line": 374,
+          "severity": "error",
+          "rule": "a11y-button-name",
+          "message": "<button> has no accessible name (no aria-label, no text content)."
+        },
+        {
+          "line": 381,
+          "severity": "error",
+          "rule": "a11y-button-name",
+          "message": "<button> has no accessible name (no aria-label, no text content)."
+        }
+      ]
+    },
+    {
+      "title": "Code review: pages/PromoPage.tsx",
+      "relative_path": "pages/PromoPage.tsx",
+      "severity": "clean",
+      "summary": {
+        "error": 0,
+        "non-compliance": 0,
+        "improvement": 0
+      },
+      "findings": []
+    },
+    {
+      "title": "Code review: pages/SignInPage.tsx",
+      "relative_path": "pages/SignInPage.tsx",
+      "severity": "clean",
+      "summary": {
+        "error": 0,
+        "non-compliance": 0,
+        "improvement": 0
+      },
+      "findings": []
+    },
+    {
+      "title": "Code review: services/publishToBlob.ts",
+      "relative_path": "services/publishToBlob.ts",
+      "severity": "non-compliance",
+      "summary": {
+        "error": 0,
+        "non-compliance": 1,
+        "improvement": 0
+      },
+      "findings": [
+        {
+          "line": 29,
+          "severity": "non-compliance",
+          "rule": "ts-any",
+          "message": "Avoid `any` — use a precise type or `unknown`."
+        }
+      ]
+    },
+    {
+      "title": "Code review: services/uploadToBlob.ts",
+      "relative_path": "services/uploadToBlob.ts",
+      "severity": "clean",
+      "summary": {
+        "error": 0,
+        "non-compliance": 0,
+        "improvement": 0
+      },
+      "findings": []
+    },
+    {
+      "title": "Code review: utils/slugify.ts",
+      "relative_path": "utils/slugify.ts",
+      "severity": "clean",
+      "summary": {
+        "error": 0,
+        "non-compliance": 0,
+        "improvement": 0
+      },
+      "findings": []
+    }
+  ]
+}

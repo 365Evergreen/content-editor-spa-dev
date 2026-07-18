@@ -1,0 +1,33 @@
+{
+    "metadata": {
+        "id": "00007",
+        "title": "Title",
+        "slug": "slug",
+        "category": "Copilot",
+        "featuredImage": "/thumbnail.webp",
+        "status": "draft",
+        "contentType": "post",
+        "submittedAt": "2026-07-18T03:41:08.106Z",
+        "blocks": [
+            {
+                "id": "4f2de645-9ff8-4c0e-af25-a0fa2d02995e",
+                "type": "heading",
+                "level": 2,
+                "text": "Cunty  bollocks cunt face",
+                "blocks": [
+                    {
+                        "id": "4f2de645-9ff8-4c0e-af25-a0fa2d02995e",
+                        "type": "heading",
+                        "level": 2,
+                        "text": "Cunty  bollocks cunt face"
+                    },
+                    {
+                        "id": "4f2de645-9ff8-4c0e-af25-a0fa2d02995e",
+                        "type": "heading",
+                        "level": 2
+                    }
+                ]
+            }
+        ]
+    }
+}

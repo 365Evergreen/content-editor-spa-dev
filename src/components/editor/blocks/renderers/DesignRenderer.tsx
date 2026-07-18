@@ -1,7 +1,7 @@
 import React from "react";
 
 // Design-domain block types
-import AccordionBlock from "../types/design/AccordionBlock";
+import AccordionBlock from "../types/design/AccordonBlock/AccordionBlock";
 import ButtonBlock from "../types/design/ButtonBlock";
 import ColumnsBlock from "../types/design/ColumnsBlock";
 import GridBlock from "../types/design/GridBlock";

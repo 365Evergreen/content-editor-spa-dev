@@ -1,5 +1,7 @@
 import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import { EditorProvider } from "../context/EditorContext";
+import { SidebarWrapper } from "../components/editor/sidebar/SidebarWrapper";
 import EditorLayout from "../components/layout/EditorLayout";
 import EditorCanvas from "../components/editor/EditorCanvas/EditorCanvas";
 import BlockPalette from "../components/editor/BlockPalette";
@@ -123,9 +125,9 @@ const EditorPage: React.FC = () => {
       category:
         contentType === "post"
           ? loadedMetadata.category ||
-            loadedMetadata.tags?.[0] ||
-            loadedMetadata.categories?.[0] ||
-            ""
+          loadedMetadata.tags?.[0] ||
+          loadedMetadata.categories?.[0] ||
+          ""
           : "",
       featuredImage,
       status: loadedMetadata.status ?? loadedMetadata.state ?? "draft",
@@ -151,21 +153,21 @@ const EditorPage: React.FC = () => {
       const candidates =
         requestedType === "page"
           ? [
-              { path: pagePagePath, contentType: "page" as const },
-              { path: pagePostPath, contentType: "page" as const },
-              { path: postPostPath, contentType: "post" as const }
-            ]
+            { path: pagePagePath, contentType: "page" as const },
+            { path: pagePostPath, contentType: "page" as const },
+            { path: postPostPath, contentType: "post" as const }
+          ]
           : requestedType === "post"
             ? [
-                { path: postPostPath, contentType: "post" as const },
-                { path: pagePagePath, contentType: "page" as const },
-                { path: pagePostPath, contentType: "page" as const }
-              ]
+              { path: postPostPath, contentType: "post" as const },
+              { path: pagePagePath, contentType: "page" as const },
+              { path: pagePostPath, contentType: "page" as const }
+            ]
             : [
-                { path: postPostPath, contentType: "post" as const },
-                { path: pagePagePath, contentType: "page" as const },
-                { path: pagePostPath, contentType: "page" as const }
-              ];
+              { path: postPostPath, contentType: "post" as const },
+              { path: pagePagePath, contentType: "page" as const },
+              { path: pagePostPath, contentType: "page" as const }
+            ];
 
       let response: Response | null = null;
       let contentType: Metadata["contentType"] = requestedType ?? "post";
@@ -265,24 +267,33 @@ const EditorPage: React.FC = () => {
       throw new Error("Missing VITE_APPROVAL_FLOW_URL environment variable.");
     }
 
+    const serializableMetadata = buildSerializableMetadata(metadata);
+    const flowPayload = {
+      // Keep these top-level fields for Power Automate trigger schema compatibility.
+      content: {
+        metadata: serializableMetadata,
+        blocks
+      }, 
+      title: metadata.title,
+      slug: metadata.slug,
+      blocks,
+      action,
+      itemId: metadata.id || metadata.slug,
+      contentType: metadata.contentType,
+      //category: metadata.contentType === "post" ? metadata.category : undefined,
+      featuredImage: metadata.featuredImage,
+      status: metadata.status,
+      blobUrl,
+      metadata: serializableMetadata,
+      submittedAt: new Date().toISOString()
+    };
+
     const response = await fetch(flowUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({
-        action,
-        itemId: metadata.id || metadata.slug,
-        contentType: metadata.contentType,
-        blobUrl,
-        metadata: buildSerializableMetadata(metadata),
-        blocks,
-        content: {
-          metadata: buildSerializableMetadata(metadata),
-          blocks
-        },
-        submittedAt: new Date().toISOString()
-      })
+      body: JSON.stringify(flowPayload)
     });
 
     if (!response.ok) {
@@ -352,7 +363,8 @@ const EditorPage: React.FC = () => {
   };
 
   return (
-    <EditorLayout
+    <EditorProvider>
+      <EditorLayout
       headerContent={
         <div className="flex items-center gap-4">
           <div className="text-xl font-semibold">Editor</div>
@@ -381,11 +393,13 @@ const EditorPage: React.FC = () => {
 
       leftSidebar={<BlockPalette onAddBlock={addBlock} />}
       rightSidebar={
-        <MetadataPanel
-          metadata={metadata}
-          onUpdateMetadata={updateMetadata}
-          mediaLibrary={[]}
-        />
+        <SidebarWrapper blocks={blocks} onUpdateBlock={updateBlock}>
+          <MetadataPanel
+            metadata={metadata}
+            onUpdateMetadata={updateMetadata}
+            mediaLibrary={[]}
+          />
+        </SidebarWrapper>
       }
     >
       {errorMessage ? (
@@ -406,6 +420,7 @@ const EditorPage: React.FC = () => {
         />
       )}
     </EditorLayout>
+  </EditorProvider>
 
 
   );

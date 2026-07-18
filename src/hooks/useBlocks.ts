@@ -94,7 +94,23 @@ const getDefaultBlockData = (type: string) => {
     // MEDIA DOMAIN
     //
     case "image":
-      return { src: "", alt: "" };
+      return {
+        url: "",
+        src: "",
+        alt: "",
+        caption: "",
+        showCaption: false,
+        alignment: "none",
+        style: "default",
+        width: "",
+        height: "",
+        aspectRatio: "auto",
+        scale: "cover",
+        linkUrl: "",
+        openInNewTab: false,
+        linkToImageFile: false,
+        enlargeOnClick: false
+      };
 
     case "gallery":
       return { urls: [""] };
@@ -144,12 +160,40 @@ const getDefaultBlockData = (type: string) => {
 
     case "accordion":
       return {
-        items: [{ title: "", content: "" }]
+        openByDefault: false,
+        autoClose: false,
+        showIcon: true,
+        iconPosition: "right",
+        items: [{ title: "", content: "", initiallyOpen: false, headingLevel: 3 }]
       };
 
     case "button":
       return {
-        buttons: [{ label: "", url: "" }]
+        alignment: "none",
+        justification: "left",
+        verticalAlignment: "top",
+        orientation: "horizontal",
+        gap: "12px",
+        buttons: [
+          {
+            label: "",
+            url: "",
+            openInNewTab: false,
+            rel: "",
+            widthPercent: 0,
+            style: "fill",
+            textAlign: "center",
+            bold: false,
+            italic: false,
+            textColor: "#ffffff",
+            backgroundColor: "#2563eb",
+            borderColor: "#2563eb",
+            borderWidth: 1,
+            borderRadius: 6,
+            paddingX: 12,
+            paddingY: 8
+          }
+        ]
       };
 
     case "more":
