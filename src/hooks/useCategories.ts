@@ -33,13 +33,22 @@ const buildTree = (flat: Category[]): CategoryNode[] => {
   return roots;
 };
 
+const getContainerRootUrl = (): string => {
+  const configuredContainerUrl = import.meta.env.VITE_AZURE_BLOB_CONTAINER_URL || "https://sa365evergreenwebsite.blob.core.windows.net/contentdrafts";
+
+  return configuredContainerUrl
+    .replace(/\/$/, "")
+    .replace(/\/(pages|posts)$/i, "");
+};
+
 export const useCategories = () => {
   const [categories, setCategories] = useState<CategoryNode[]>([]);
 
   useEffect(() => {
-    fetch(
-      "https://cdn.365evergreen.com/content/categories/categories.json"
-    )
+    const containerRootUrl = getContainerRootUrl();
+    const categoriesUrl = `${containerRootUrl}/categories/categories.json`;
+
+    fetch(categoriesUrl)
       .then((res) => res.json())
       .then((data) => setCategories(buildTree(data)))
       .catch(() => setCategories([]));
