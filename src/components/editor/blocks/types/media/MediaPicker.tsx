@@ -20,6 +20,11 @@ const MediaPicker: React.FC<MediaPickerProps> = ({
     const file = e.target.files?.[0];
     if (!file) return;
 
+    if (!file.type.startsWith("image/")) {
+      setError("Please select an image file.");
+      return;
+    }
+
     try {
       setIsUploading(true);
       setError("");
@@ -28,7 +33,7 @@ const MediaPicker: React.FC<MediaPickerProps> = ({
       onSelect(url);
     } catch (err) {
       console.error(err);
-      setError("Upload failed. Please try again.");
+      setError(err instanceof Error ? err.message : "Upload failed. Please try again.");
     } finally {
       setIsUploading(false);
     }
@@ -55,6 +60,7 @@ const MediaPicker: React.FC<MediaPickerProps> = ({
         <span>{isUploading ? "Uploading..." : "Upload"}</span>
         <input
           type="file"
+          accept="image/*"
           className="hidden"
           onChange={handleUpload}
           disabled={isUploading}

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Music } from "lucide-react";
+import { Music, X } from "lucide-react";
 import MediaPicker from "./MediaPicker";
 
 export interface AudioBlockProps {
@@ -13,18 +13,47 @@ const AudioBlock: React.FC<AudioBlockProps> = ({
   onUpdate,
   mediaLibrary
 }) => {
+  const [showToolbar, setShowToolbar] = useState(false);
   const [showPicker, setShowPicker] = useState(false);
+  const containerRef = React.useRef<HTMLDivElement>(null);
+
+  const handleBlur = (event: React.FocusEvent<HTMLDivElement>) => {
+    if (containerRef.current?.contains(event.relatedTarget as Node)) {
+      return;
+    }
+    setShowToolbar(false);
+  };
 
   return (
-    <div className="relative border rounded-lg p-4 bg-white">
+    <div
+      ref={containerRef}
+      className="relative border rounded-lg p-4 bg-white"
+      onClick={() => setShowToolbar(true)}
+      onFocusCapture={() => setShowToolbar(true)}
+      onBlurCapture={handleBlur}
+    >
       <div className="flex justify-between mb-3">
         <h3 className="font-semibold">Audio</h3>
-        <button
-          className="p-1 hover:bg-gray-100 rounded"
-          onClick={() => setShowPicker(true)}
-        >
-          <Music className="w-4 h-4" />
-        </button>
+        {showToolbar && (
+          <div className="flex items-center gap-1">
+            <button
+              type="button"
+              className="p-1 hover:bg-gray-100 rounded"
+              onClick={() => setShowPicker(true)}
+              title="Select audio"
+            >
+              <Music className="w-4 h-4" />
+            </button>
+            <button
+              type="button"
+              className="p-1 hover:bg-gray-100 rounded"
+              onClick={() => onUpdate(block.id, { url: undefined })}
+              title="Remove audio"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        )}
       </div>
 
       {showPicker && (

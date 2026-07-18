@@ -1,0 +1,41 @@
+{
+  "version": "1.0",
+  "appId": "01a4d8e8-2226-477b-9420-8ae297746a59",
+  "appDisplayName": "365 Evergreen website content editor",
+  "region": "prod",
+  "environmentId": "9e393617-e3e8-e41f-a368-6bde5b1121c3",
+  "description": " ",
+  "buildPath": "./dist",
+  "buildEntryPoint": "index.html",
+  "localAppUrl": "http://localhost:3000",
+  "logoPath": "Default",
+  "connectionReferences": {
+    "470a6b89-8775-496f-a94d-8a697c55cee4": {
+      "id": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+      "displayName": "SharePoint",
+      "dataSources": [
+        "blogposts"
+      ],
+      "dataSets": {
+        "https://365evergreen.sharepoint.com/sites/AzureSWATeam": {
+          "dataSources": {
+            "blogposts": {
+              "tableName": "c59d8232-81b1-4738-869d-e8eb64def9d4"
+            }
+          }
+        }
+      }
+    }
+  },
+  "databaseReferences": {
+    "default.cds": {
+      "dataSources": {
+        "e365blogposts": {
+          "entitySetName": "dev365_e365blogposts",
+          "logicalName": "dev365_e365blogpost"
+        }
+      },
+      "environmentVariableName": ""
+    }
+  }
+}

@@ -31,7 +31,7 @@ const BlockToolbar: React.FC<BlockToolbarProps> = ({
         className="px-2 py-1 bg-red-200 text-red-700 rounded hover:bg-red-300"
         onClick={onDelete}
       >
-        Delete
+        🗑
       </button>
     </div>
   );

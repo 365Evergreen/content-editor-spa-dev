@@ -42,6 +42,14 @@
       "allowedRoles": ["anonymous"]
     },
     {
+      "route": "/editor",
+      "allowedRoles": ["anonymous"]
+    },
+    {
+      "route": "/editor/*",
+      "allowedRoles": ["anonymous"]
+    },
+    {
       "route": "/",
       "allowedRoles": ["anonymous"]
     },
