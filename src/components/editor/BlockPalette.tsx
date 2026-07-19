@@ -17,7 +17,7 @@ import {
   Group,
   Rows,
   LayoutList,
-  MoreHorizontal
+  Grid2x2
 } from "lucide-react";
 
 export interface BlockPaletteProps {
@@ -53,10 +53,10 @@ const BlockPalette: React.FC<BlockPaletteProps> = ({ onAddBlock }) => {
         { type: "accordion", label: "Accordion", icon: PanelBottom },
         { type: "button", label: "Button", icon: SquarePlus },
         { type: "columns", label: "Columns", icon: Columns },
+        { type: "grid", label: "Grid", icon: Grid2x2 },
         { type: "group", label: "Group", icon: Group },
         { type: "row", label: "Row", icon: Rows },
-        { type: "stack", label: "Stack", icon: LayoutList },
-        { type: "more", label: "More", icon: MoreHorizontal }
+        { type: "stack", label: "Stack", icon: LayoutList }
       ]
     }
   ];

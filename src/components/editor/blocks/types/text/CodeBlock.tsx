@@ -1,4 +1,5 @@
 import React from "react";
+import TextareaCodeEditor from "@uiw/react-textarea-code-editor";
 import { Clipboard, Eraser, WrapText } from "lucide-react";
 
 export interface CodeBlockProps {
@@ -12,11 +13,23 @@ export interface CodeBlockProps {
   onFocus?: () => void;
 }
 
+const languageMap: Record<string, string> = {
+  typescript: "typescript",
+  javascript: "javascript",
+  python: "python",
+  java: "java",
+  csharp: "csharp",
+  cpp: "cpp",
+  ruby: "ruby",
+  go: "go",
+  text: "text"
+};
+
 const CodeBlock: React.FC<CodeBlockProps> = ({ block, onUpdate, onFocus }) => {
   const [showToolbar, setShowToolbar] = React.useState(false);
   const containerRef = React.useRef<HTMLDivElement>(null);
 
-  const handleLanguageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleLanguageChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     onUpdate(block.id, { language: e.target.value });
   };
 
@@ -70,25 +83,40 @@ const CodeBlock: React.FC<CodeBlockProps> = ({ block, onUpdate, onFocus }) => {
         <button type="button" className="rounded p-1 hover:bg-gray-100" onClick={clearCode} title="Clear code">
           <Eraser className="h-4 w-4" />
         </button>
-        </div>
+        <select
+          className="rounded p-1 hover:bg-gray-100"
+          value={block.language}
+          onChange={handleLanguageChange}
+        >
+          <option value="typescript">TypeScript</option>
+          <option value="javascript">JavaScript</option>
+          <option value="python">Python</option>
+          <option value="java">Java</option>
+          <option value="csharp">C#</option>
+          <option value="cpp">C++</option>
+          <option value="ruby">Ruby</option>
+          <option value="go">Go</option>
+        </select>
+      </div>
       )}
 
       {/* Language */}
-      <input
-        type="text"
-        className="mb-2 w-full border rounded px-2 py-1 text-sm"
-        placeholder="Language (e.g., typescript)"
-        value={block.language}
-        onChange={handleLanguageChange}
-      />
-
-      {/* Code */}
-      <textarea
-        className="w-full border rounded p-2 font-mono text-sm bg-gray-100"
-        rows={6}
-        placeholder="Write code here..."
+      <TextareaCodeEditor
         value={block.code}
+        language={languageMap[block.language] ?? "text"}
+        placeholder="Write code here..."
         onChange={handleCodeChange}
+        onFocus={onFocus}
+        padding={12}
+        style={{
+          fontSize: 14,
+          backgroundColor: "var(--code-bg)",
+          fontFamily: "var(--mono)",
+          minHeight: 190,
+          width: "100%",
+          borderRadius: 8,
+          border: "1px solid #d1d5db"
+        }}
       />
     </div>
   );

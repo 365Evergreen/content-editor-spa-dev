@@ -1,6 +1,7 @@
 import React from "react";
 import BlockRenderer from "../blocks/renderers/BlockRenderer";
 import BlockToolbar from "../blocks/BlockToolbar";
+import { useEditor } from "../../../context/EditorContext";
 
 export interface EditorCanvasProps {
   blocks: any[];
@@ -17,6 +18,8 @@ const EditorCanvas: React.FC<EditorCanvasProps> = ({
   onMoveBlock,
   onDeleteBlock
 }) => {
+  const { selectedBlockId, setSelectedBlockId } = useEditor();
+
   return (
     <div className="w-full p-6 bg-gray-50 border rounded-lg">
       {/* Canvas Header */}
@@ -53,7 +56,13 @@ const EditorCanvas: React.FC<EditorCanvasProps> = ({
       )}
 
       {blocks.map((block) => (
-        <div key={block.id} className="mb-8">
+        <div
+          key={block.id}
+          className={`mb-8 rounded-md p-2 transition ${
+            selectedBlockId === block.id ? "ring-2 ring-blue-300 bg-white" : ""
+          }`}
+          onClick={() => setSelectedBlockId(block.id)}
+        >
           <BlockToolbar
             onMoveUp={() => onMoveBlock(block.id, "up")}
             onMoveDown={() => onMoveBlock(block.id, "down")}
@@ -62,6 +71,7 @@ const EditorCanvas: React.FC<EditorCanvasProps> = ({
           <BlockRenderer
             block={block}
             onUpdate={onUpdateBlock}
+            onFocus={() => setSelectedBlockId(block.id)}
           />
         </div>
       ))}

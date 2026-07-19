@@ -1,13 +1,15 @@
 import React from "react";
 import styles from "./AccordionBlock.module.css";
+import NestedBlocksEditor from "../NestedBlocksEditor";
+import type { Block } from "../../../../../../hooks/useBlocks";
 
 type AccordionHeadingLevel = 2 | 3 | 4 | 5 | 6;
 
 type AccordionItem = {
   title: string;
-  content: string;
   initiallyOpen?: boolean;
   headingLevel?: AccordionHeadingLevel;
+  panelBlocks: Block[];
 };
 
 export interface AccordionBlockProps {
@@ -76,7 +78,7 @@ const AccordionBlock: React.FC<AccordionBlockProps> = ({ block, onUpdate, onFocu
 
   const addItem = () => {
     onUpdate(block.id, {
-      items: [...block.items, { title: "", content: "", initiallyOpen: false, headingLevel: 3 }]
+      items: [...block.items, { title: "", initiallyOpen: false, headingLevel: 3, panelBlocks: [] }]
     });
   };
 
@@ -139,7 +141,7 @@ const AccordionBlock: React.FC<AccordionBlockProps> = ({ block, onUpdate, onFocu
 
       {block.items.map((item, index) => (
         <div key={index} className="border rounded mb-3 bg-white">
-          <h3 className="m-0">
+          {React.createElement(`h${item.headingLevel || 3}` as keyof React.JSX.IntrinsicElements, { className: "m-0" }, (
             <button
               type="button"
               className={`${styles.itemHeading} ${
@@ -158,7 +160,7 @@ const AccordionBlock: React.FC<AccordionBlockProps> = ({ block, onUpdate, onFocu
                 {item.title?.trim() || `Accordion item ${index + 1}`}
               </span>
             </button>
-          </h3>
+          ))}
 
           {isOpen(index) && (
             <div id={`${block.id}-accordion-panel-${index}`} className="p-3 border-t">
@@ -168,14 +170,6 @@ const AccordionBlock: React.FC<AccordionBlockProps> = ({ block, onUpdate, onFocu
                 placeholder="Accordion heading"
                 value={item.title}
                 onChange={(e) => updateItem(index, "title", e.target.value)}
-              />
-
-              <textarea
-                className="w-full border rounded px-2 py-1 mb-2"
-                placeholder="Accordion panel content"
-                rows={3}
-                value={item.content}
-                onChange={(e) => updateItem(index, "content", e.target.value)}
               />
 
               <div className="flex flex-wrap items-center gap-2 mb-2 text-sm">
@@ -230,6 +224,21 @@ const AccordionBlock: React.FC<AccordionBlockProps> = ({ block, onUpdate, onFocu
                 >
                   ✕ Remove
                 </button>
+              </div>
+
+              <div className="mt-3">
+                <NestedBlocksEditor
+                  blocks={item.panelBlocks || []}
+                  onChange={(panelBlocks) => {
+                    const updated = block.items.map((entry, itemIndex) =>
+                      itemIndex === index ? { ...entry, panelBlocks } : entry
+                    );
+                    onUpdate(block.id, { items: updated });
+                  }}
+                  onFocus={onFocus}
+                  emptyLabel="No panel content yet."
+                  addLabel="Add panel block"
+                />
               </div>
             </div>
           )}

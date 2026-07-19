@@ -1,12 +1,7 @@
 import { useState } from "react";
+import { createBlock, type Block as EditorBlock } from "./blockDefaults";
 
-export interface Block {
-  id: string;
-  type: string;
-  [key: string]: any;
-}
-
-const uuid = () => crypto.randomUUID();
+export type Block = EditorBlock;
 
 const useBlocks = () => {
   const [blocks, setBlocks] = useState<Block[]>([]);
@@ -15,13 +10,7 @@ const useBlocks = () => {
   // ADD BLOCK
   //
   const addBlock = (type: string) => {
-    const newBlock: Block = {
-      id: uuid(),
-      type,
-      ...getDefaultBlockData(type)
-    };
-
-    setBlocks((prev) => [...prev, newBlock]);
+    setBlocks((prev) => [...prev, createBlock(type)]);
   };
 
   //
@@ -71,140 +60,6 @@ const useBlocks = () => {
     moveBlock,
     deleteBlock
   };
-};
-
-//
-// DEFAULT BLOCK PAYLOADS
-//
-const getDefaultBlockData = (type: string) => {
-  switch (type) {
-    //
-    // TEXT DOMAIN
-    //
-    case "paragraph":
-      return { text: "" };
-
-    case "heading":
-      return { level: 2, text: "" };
-
-    case "list":
-      return { items: [""] };
-
-    //
-    // MEDIA DOMAIN
-    //
-    case "image":
-      return {
-        url: "",
-        src: "",
-        alt: "",
-        caption: "",
-        showCaption: false,
-        alignment: "none",
-        style: "default",
-        width: "",
-        height: "",
-        aspectRatio: "auto",
-        scale: "cover",
-        linkUrl: "",
-        openInNewTab: false,
-        linkToImageFile: false,
-        enlargeOnClick: false
-      };
-
-    case "gallery":
-      return { urls: [""] };
-
-    case "audio":
-      return { url: "" };
-
-    case "video":
-      return { url: "" };
-
-    case "cover":
-      return { url: "", text: "" };
-
-    case "file":
-      return { name: "", url: "" };
-
-    //
-    // CODE DOMAIN
-    //
-    case "code":
-      return { language: "text", code: "" };
-
-    //
-    // DATA / LAYOUT DOMAIN
-    //
-    case "table":
-      return { rows: [[""]] };
-
-    case "columns":
-      return { columns: [""] };
-
-    case "group":
-      return { items: [""] };
-
-    case "row":
-      return { items: [""] };
-
-    case "stack":
-      return { items: [""] };
-
-    case "grid":
-      return {
-        rows: 1,
-        cols: 1,
-        cells: [[""]]
-      };
-
-    case "accordion":
-      return {
-        openByDefault: false,
-        autoClose: false,
-        showIcon: true,
-        iconPosition: "right",
-        items: [{ title: "", content: "", initiallyOpen: false, headingLevel: 3 }]
-      };
-
-    case "button":
-      return {
-        alignment: "none",
-        justification: "left",
-        verticalAlignment: "top",
-        orientation: "horizontal",
-        gap: "12px",
-        buttons: [
-          {
-            label: "",
-            url: "",
-            openInNewTab: false,
-            rel: "",
-            widthPercent: 0,
-            style: "fill",
-            textAlign: "center",
-            bold: false,
-            italic: false,
-            textColor: "#ffffff",
-            backgroundColor: "#2563eb",
-            borderColor: "#2563eb",
-            borderWidth: 1,
-            borderRadius: 6,
-            paddingX: 12,
-            paddingY: 8
-          }
-        ]
-      };
-
-    case "more":
-      return { content: "" };
-
-    //
-    // FALLBACK
-    //
-    default:
-      return {};
-  }
 };
 
 export default useBlocks;
